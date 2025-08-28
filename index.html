@@ -1,0 +1,3171 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Issue Reporting System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { font-family: 'Prompt', sans-serif; }
+        
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+        
+        .neon-glow {
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6), 0 0 60px rgba(59, 130, 246, 0.4);
+        }
+        
+        .neon-green { box-shadow: 0 0 30px rgba(34, 197, 94, 0.6), 0 0 60px rgba(34, 197, 94, 0.4); }
+        .neon-yellow { box-shadow: 0 0 30px rgba(234, 179, 8, 0.6), 0 0 60px rgba(234, 179, 8, 0.4); }
+        .neon-red { box-shadow: 0 0 30px rgba(239, 68, 68, 0.6), 0 0 60px rgba(239, 68, 68, 0.4); }
+        .neon-purple { box-shadow: 0 0 30px rgba(147, 51, 234, 0.6), 0 0 60px rgba(147, 51, 234, 0.4); }
+        
+        .animated-gradient {
+            background: linear-gradient(-45deg, #0f0f23, #1a1a3a, #2d1b69, #1e3a8a, #0f172a);
+            background-size: 400% 400%;
+            animation: gradientFlow 20s ease infinite;
+        }
+        
+        @keyframes gradientFlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .floating-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(1px);
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .orb-1 {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%);
+            top: 10%;
+            left: 10%;
+            animation-delay: 0s;
+        }
+        
+        .orb-2 {
+            width: 200px;
+            height: 200px;
+            background: radial-gradient(circle, rgba(147, 51, 234, 0.12) 0%, transparent 70%);
+            top: 60%;
+            right: 15%;
+            animation-delay: 3s;
+        }
+        
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+            bottom: 20%;
+            left: 30%;
+            animation-delay: 6s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.7; }
+            50% { transform: translateY(-30px) rotate(180deg); opacity: 1; }
+        }
+        
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .hover-lift:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+            box-shadow: 0 10px 30px rgba(17, 153, 142, 0.4);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            box-shadow: 0 10px 30px rgba(255, 65, 108, 0.4);
+        }
+        
+        .sidebar-gradient {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.9) 100%);
+            backdrop-filter: blur(20px);
+        }
+        
+        .nav-item {
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .nav-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .nav-item:hover::before {
+            left: 100%;
+        }
+        
+        .nav-item:hover {
+            background: rgba(59, 130, 246, 0.15);
+            transform: translateX(5px);
+        }
+        
+        .nav-item.active {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(147, 51, 234, 0.15));
+            border-left: 4px solid #3b82f6;
+        }
+        
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .status-pending {
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(234, 179, 8, 0.1));
+            color: #fbbf24;
+            border: 1px solid rgba(234, 179, 8, 0.3);
+        }
+        
+        .status-progress {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(59, 130, 246, 0.1));
+            color: #60a5fa;
+            border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        
+        .status-completed {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .sla-ontime {
+            background: linear-gradient(135deg, rgba(34, 197, 94, 0.2), rgba(34, 197, 94, 0.1));
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+        
+        .sla-overdue {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(239, 68, 68, 0.1));
+            color: #f87171;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .sla-waiting {
+            background: linear-gradient(135deg, rgba(156, 163, 175, 0.2), rgba(156, 163, 175, 0.1));
+            color: #9ca3af;
+            border: 1px solid rgba(156, 163, 175, 0.3);
+        }
+        
+        .input-field {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            color: white;
+        }
+        
+        .input-field:focus {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+        }
+        
+        .input-field option {
+            background: rgba(30, 41, 59, 0.95);
+            color: white;
+            padding: 8px 12px;
+        }
+        
+        .input-field option:hover {
+            background: rgba(59, 130, 246, 0.8);
+            color: white;
+        }
+        
+        .input-field option:checked {
+            background: rgba(59, 130, 246, 0.9);
+            color: white;
+        }
+        
+        .table-row {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .table-row:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: scale(1.01);
+        }
+        
+        .metric-card {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(59, 130, 246, 0.3);
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+    </style>
+</head>
+<body class="animated-gradient min-h-screen text-white overflow-hidden">
+    <!-- Floating Orbs -->
+    <div class="floating-orb orb-1"></div>
+    <div class="floating-orb orb-2"></div>
+    <div class="floating-orb orb-3"></div>
+
+    <!-- Login Page -->
+    <div id="loginPage" class="flex items-center justify-center min-h-screen p-4 sm:p-6 relative z-10">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <div class="absolute top-1/4 left-1/4 w-24 h-24 sm:w-32 sm:h-32 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-tr from-cyan-500 to-pink-500 rounded-full blur-3xl"></div>
+        </div>
+        
+        <div class="glass-card neon-glow rounded-2xl sm:rounded-3xl p-5 sm:p-7 w-full max-w-sm sm:max-w-md hover-lift fade-in relative overflow-hidden">
+            <!-- Decorative Elements -->
+            <div class="absolute top-0 right-0 w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-500/20 to-transparent rounded-full -mr-8 -mt-8 sm:-mr-10 sm:-mt-10"></div>
+            <div class="absolute bottom-0 left-0 w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-tr from-purple-500/20 to-transparent rounded-full -ml-6 -mb-6 sm:-ml-8 sm:-mb-8"></div>
+            
+            <!-- Header Section -->
+            <div class="text-center mb-6 sm:mb-8 relative z-10">
+                <!-- Logo Container -->
+                <div class="relative mb-4 sm:mb-6">
+                    <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto bg-gradient-to-br from-blue-500 via-purple-600 to-cyan-500 rounded-full sm:rounded-2xl flex items-center justify-center neon-glow shadow-2xl relative overflow-hidden group">
+                        <!-- Animated Background -->
+                        <div class="absolute inset-0 bg-gradient-to-br from-blue-400 via-purple-500 to-cyan-400 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                        
+                        <!-- Icon -->
+                        <svg class="w-8 h-8 sm:w-10 sm:h-10 text-white relative z-10 group-hover:scale-110 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M21,16H3V4H21M21,2H3C1.89,2 1,2.89 1,4V16A2,2 0 0,0 3,18H10V20H8V22H16V20H14V18H21A2,2 0 0,0 23,16V4C23,2.89 22.1,2 21,2Z"/>
+                        </svg>
+                        
+                        <!-- Floating Particles -->
+                        <div class="absolute inset-0 opacity-30">
+                            <div class="absolute top-1 left-1 w-1 h-1 bg-white rounded-full animate-pulse"></div>
+                            <div class="absolute top-2 right-2 w-1 h-1 bg-white rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+                            <div class="absolute bottom-2 left-3 w-1 h-1 bg-white rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Decorative Ring -->
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 border-2 border-blue-400/30 rounded-full animate-pulse"></div>
+                    </div>
+                </div>
+                
+                <!-- Title Section -->
+                <div class="space-y-2 sm:space-y-3">
+                    <h1 class="text-lg sm:text-xl md:text-2xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent leading-tight">
+                        IT Issue Reporting System
+                    </h1>
+                    
+                    <!-- Subtitle with Enhanced Design -->
+                    <div class="space-y-2">
+                        <div class="inline-flex items-center space-x-2 px-3 py-1.5 bg-white/10 rounded-full border border-white/20">
+                            <div class="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
+                            <p class="text-gray-300 text-xs sm:text-sm font-medium">ระบบแจ้งปัญหาด้านเทคโนโลยีสารสนเทศ</p>
+                        </div>
+                        
+                        <div class="flex items-center justify-center space-x-2 text-gray-400 text-xs">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+                            </svg>
+                            <span>โรงพยาบาลท่ากระดาน</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Decorative Line -->
+                    <div class="flex items-center justify-center space-x-2 mt-3">
+                        <div class="w-6 h-0.5 bg-gradient-to-r from-transparent to-blue-500 rounded-full"></div>
+                        <div class="w-1.5 h-1.5 bg-blue-500 rounded-full"></div>
+                        <div class="w-12 h-0.5 bg-gradient-to-r from-blue-500 via-purple-500 to-cyan-500 rounded-full"></div>
+                        <div class="w-1.5 h-1.5 bg-cyan-500 rounded-full"></div>
+                        <div class="w-6 h-0.5 bg-gradient-to-l from-transparent to-cyan-500 rounded-full"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Login Form -->
+            <form id="loginForm" class="space-y-5 sm:space-y-6 relative z-10">
+                <!-- Username Field -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-300 flex items-center">
+                        <svg class="w-3.5 h-3.5 mr-2 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                        </svg>
+                        ชื่อผู้ใช้งาน
+                    </label>
+                    <div class="relative group">
+                        <input type="text" id="username" class="input-field w-full px-4 py-3 sm:py-3.5 rounded-xl focus:outline-none text-white placeholder-gray-400 text-sm transition-all duration-300 group-hover:bg-white/8" placeholder="กรอกชื่อผู้ใช้งาน" required>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                            <svg class="w-4 h-4 text-gray-500 group-focus-within:text-blue-400 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Password Field -->
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-300 flex items-center">
+                        <svg class="w-3.5 h-3.5 mr-2 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6A2,2 0 0,1 4,20V10A2,2 0 0,1 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/>
+                        </svg>
+                        รหัสผ่าน
+                    </label>
+                    <div class="relative group">
+                        <input type="password" id="password" class="input-field w-full px-4 py-3 sm:py-3.5 rounded-xl focus:outline-none text-white placeholder-gray-400 text-sm transition-all duration-300 group-hover:bg-white/8" placeholder="กรอกรหัสผ่าน" required>
+                        <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                            <svg class="w-4 h-4 text-gray-500 group-focus-within:text-purple-400 transition-colors duration-300" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12,9A3,3 0 0,0 9,12A3,3 0 0,0 12,15A3,3 0 0,0 15,12A3,3 0 0,0 12,9M12,17A5,5 0 0,1 7,12A5,5 0 0,1 12,7A5,5 0 0,1 17,12A5,5 0 0,1 12,17M12,4.5C7,4.5 2.73,7.61 1,12C2.73,16.39 7,19.5 12,19.5C17,19.5 21.27,16.39 23,12C21.27,7.61 17,4.5 12,4.5Z"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Login Button -->
+                <div class="pt-2">
+                    <button type="submit" class="btn-primary w-full py-3 sm:py-4 rounded-xl font-bold text-white transition-all duration-300 transform hover:scale-[1.02] shadow-2xl text-sm sm:text-base relative overflow-hidden group">
+                        <!-- Button Background Animation -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-600 via-purple-600 to-cyan-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        
+                        <!-- Button Content -->
+                        <span class="relative z-10 flex items-center justify-center">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M10,17V14H3V10H10V7L15,12L10,17M10,2H19A2,2 0 0,1 21,4V20A2,2 0 0,1 19,22H10A2,2 0 0,1 8,20V18H10V20H19V4H10V6H8V4A2,2 0 0,1 10,2Z"/>
+                            </svg>
+                            เข้าสู่ระบบ
+                            <div class="ml-2 flex space-x-1">
+                                <div class="w-1 h-1 bg-white rounded-full animate-pulse"></div>
+                                <div class="w-1 h-1 bg-white rounded-full animate-pulse" style="animation-delay: 0.2s;"></div>
+                                <div class="w-1 h-1 bg-white rounded-full animate-pulse" style="animation-delay: 0.4s;"></div>
+                            </div>
+                        </span>
+                        
+                        <!-- Button Shine Effect -->
+                        <div class="absolute inset-0 -skew-x-12 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 group-hover:opacity-100 group-hover:animate-pulse transition-opacity duration-300"></div>
+                    </button>
+                </div>
+                
+                <!-- Additional Info -->
+                <div class="text-center pt-3 sm:pt-4">
+                    <div class="inline-flex items-center space-x-2 text-xs text-gray-400 bg-white/5 rounded-full px-3 py-2 border border-white/10">
+                        <svg class="w-3 h-3 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                        <span>ระบบปลอดภัย SSL</span>
+                        <div class="w-0.5 h-0.5 bg-gray-400 rounded-full"></div>
+                        <span>เข้าถึงได้ 24/7</span>
+                    </div>
+                    
+                    <!-- Version Info -->
+                    <div class="mt-3 text-xs text-gray-500">
+                        <div class="flex items-center justify-center space-x-2">
+                            <!--<span>Version 1.0</span>
+                            <div class="w-0.5 h-0.5 bg-gray-500 rounded-full"></div>-->
+                            <span>กลุ่มงานดิจิทัลทางการแพทย์</span>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="mainApp" class="hidden flex h-screen relative z-10">
+        <!-- Sidebar -->
+        <div class="w-64 sidebar-gradient border-r border-white/10 p-5 flex flex-col">
+            <div class="flex items-center mb-8">
+                <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 neon-glow">
+                    <svg class="w-5 h-5" fill="white" viewBox="0 0 24 24">
+                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">IT Issue Reporting</h2>
+                    <p class="text-xs text-gray-400">ระบบแจ้งปัญหาด้านเทคโนโลยีสารสนเทศ</p>
+                </div>
+            </div>
+            
+            <nav class="space-y-2 flex-1">
+                <button onclick="showPage('dashboard')" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
+                    <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-sm">หน้าหลัก</div>
+                        <div class="text-xs text-gray-400">Dashboard</div>
+                    </div>
+                </button>
+                
+                <button onclick="showPage('report')" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
+                    <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-sm">แจ้งปัญหา</div>
+                        <div class="text-xs text-gray-400">Report Issue</div>
+                    </div>
+                </button>
+                
+                <button onclick="showPage('manage')" id="manageBtn" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group hidden">
+                    <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-sm">จัดการปัญหา</div>
+                        <div class="text-xs text-gray-400">Manage Issues</div>
+                    </div>
+                </button>
+                
+                <button onclick="showPage('reports')" id="reportsBtn" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group hidden">
+                    <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <div class="font-semibold text-sm">รายงาน</div>
+                        <div class="text-xs text-gray-400">Reports</div>
+                    </div>
+                </button>
+            </nav>
+            
+            <div class="mt-4">
+                <button onclick="logout()" class="w-full px-4 py-3 btn-danger rounded-lg transition-all flex items-center justify-center group hover-lift">
+                    <svg class="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5z"/>
+                    </svg>
+                    <span class="font-semibold text-sm">ออกจากระบบ</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1 overflow-auto bg-gradient-to-br from-slate-900/50 to-slate-800/30">
+            <!-- Dashboard Page -->
+            <div id="dashboardPage" class="p-6">
+                <!-- Header Section -->
+                <div class="mb-8 fade-in text-center">
+                    <div class="inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br from-blue-500 via-purple-600 to-cyan-500 rounded-2xl mb-4 neon-glow">
+                        <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                        </svg>
+                    </div>
+                    <h1 class="text-3xl font-bold mb-3 bg-gradient-to-r from-blue-400 via-purple-400 to-cyan-400 bg-clip-text text-transparent">
+                        แดชบอร์ดหลัก
+                    </h1>
+                    <p class="text-base text-gray-300 max-w-xl mx-auto leading-relaxed">
+                        ภาพรวมระบบแจ้งปัญหาด้านเทคโนโลยีสารสนเทศ โรงพยาบาลท่ากระดาน
+                    </p>
+                    <div class="w-16 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
+                </div>
+
+                <!-- Main Status Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+                    <!-- Total Issues Card -->
+                    <div class="glass-card neon-glow rounded-2xl p-6 hover-lift metric-card relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-500/20 to-transparent rounded-full -mr-12 -mt-12"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center neon-glow group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M20,18C20.5,18 21,17.5 21,17V7C21,6.5 20.5,6 20,6H4C3.5,6 3,6.5 3,7V17C3,17.5 3.5,18 4,18H20M20,4A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4H20M5,8H19V16H5V8Z"/>
+                                    </svg>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs text-blue-400 font-semibold uppercase tracking-wider">Total</div>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="text-base font-semibold text-gray-200">ปัญหาทั้งหมด</h3>
+                                <p class="text-3xl font-bold text-blue-400 mb-1" id="totalIssues">0</p>
+                                <p class="text-xs text-gray-400">รายการที่แจ้งเข้ามาทั้งหมด</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pending Issues Card -->
+                    <div class="glass-card neon-yellow rounded-2xl p-6 hover-lift metric-card relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-yellow-500/20 to-transparent rounded-full -mr-12 -mt-12"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center neon-yellow group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"/>
+                                    </svg>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs text-yellow-400 font-semibold uppercase tracking-wider">Pending</div>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="text-base font-semibold text-gray-200">รอดำเนินการ</h3>
+                                <p class="text-3xl font-bold text-yellow-400 mb-1" id="pendingIssues">0</p>
+                                <p class="text-xs text-gray-400">รอการตอบสนองจากเจ้าหน้าที่</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- In Progress Card -->
+                    <div class="glass-card neon-purple rounded-2xl p-6 hover-lift metric-card relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-purple-500/20 to-transparent rounded-full -mr-12 -mt-12"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center neon-purple group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12H16A4,4 0 0,0 12,8V6M10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12Z"/>
+                                    </svg>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs text-purple-400 font-semibold uppercase tracking-wider">Working</div>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="text-base font-semibold text-gray-200">กำลังดำเนินการ</h3>
+                                <p class="text-3xl font-bold text-purple-400 mb-1" id="inProgressIssues">0</p>
+                                <p class="text-xs text-gray-400">อยู่ระหว่างการแก้ไขปัญหา</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Completed Card -->
+                    <div class="glass-card neon-green rounded-2xl p-6 hover-lift metric-card relative overflow-hidden group">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-green-500/20 to-transparent rounded-full -mr-12 -mt-12"></div>
+                        <div class="relative z-10">
+                            <div class="flex items-start justify-between mb-4">
+                                <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center neon-green group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
+                                    </svg>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-xs text-green-400 font-semibold uppercase tracking-wider">Done</div>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <h3 class="text-base font-semibold text-gray-200">เสร็จสิ้น</h3>
+                                <p class="text-3xl font-bold text-green-400 mb-1" id="completedIssues">0</p>
+                                <p class="text-xs text-gray-400">ดำเนินการเสร็จสมบูรณ์</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SLA Performance Section -->
+                <div class="mb-8">
+                    <div class="text-center mb-6">
+                        <h2 class="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent mb-2">
+                            ประสิทธิภาพ SLA
+                        </h2>
+                        <p class="text-sm text-gray-400">การตอบสนองตามเวลาที่กำหนด (Service Level Agreement)</p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <!-- SLA On Time -->
+                        <div class="glass-card neon-green rounded-2xl p-6 hover-lift relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent"></div>
+                            <div class="relative z-10 text-center">
+                                <div class="w-14 h-14 bg-gradient-to-br from-green-500 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 neon-green group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-200 mb-2">SLA ตรงเวลา</h3>
+                                <p class="text-3xl font-bold text-green-400 mb-1" id="slaOnTime">0</p>
+                                <p class="text-xs text-gray-400">ดำเนินการภายในเวลาที่กำหนด</p>
+                                <div class="mt-3 flex items-center justify-center">
+                                    <div class="w-1.5 h-1.5 bg-green-400 rounded-full mr-2"></div>
+                                    <span class="text-xs text-green-400 font-medium">On Time Performance</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- SLA Overdue -->
+                        <div class="glass-card neon-red rounded-2xl p-6 hover-lift relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-gradient-to-br from-red-500/5 to-transparent"></div>
+                            <div class="relative z-10 text-center">
+                                <div class="w-14 h-14 bg-gradient-to-br from-red-500 to-rose-600 rounded-full flex items-center justify-center mx-auto mb-4 neon-red group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-200 mb-2">SLA เกินเวลา</h3>
+                                <p class="text-3xl font-bold text-red-400 mb-1" id="slaOverdue">0</p>
+                                <p class="text-xs text-gray-400">เกินเวลาที่กำหนดไว้</p>
+                                <div class="mt-3 flex items-center justify-center">
+                                    <div class="w-1.5 h-1.5 bg-red-400 rounded-full mr-2"></div>
+                                    <span class="text-xs text-red-400 font-medium">Overdue Cases</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Total SLA -->
+                        <div class="glass-card neon-glow rounded-2xl p-6 hover-lift relative overflow-hidden group">
+                            <div class="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent"></div>
+                            <div class="relative z-10 text-center">
+                                <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center mx-auto mb-4 neon-glow group-hover:scale-110 transition-transform duration-300">
+                                    <svg class="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                </div>
+                                <h3 class="text-lg font-semibold text-gray-200 mb-2">รวม SLA</h3>
+                                <p class="text-3xl font-bold text-blue-400 mb-1" id="totalSla">0</p>
+                                <p class="text-xs text-gray-400">จำนวนรวมทั้งหมด</p>
+                                <div class="mt-3 flex items-center justify-center">
+                                    <div class="w-1.5 h-1.5 bg-blue-400 rounded-full mr-2"></div>
+                                    <span class="text-xs text-blue-400 font-medium">Total Tracking</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts -->
+                <div class="space-y-6 mb-6">
+                    <div class="glass-card neon-glow rounded-2xl p-6 hover-lift">
+                        <h3 class="text-lg font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">ปัญหาที่พบบ่อย</h3>
+                        <div class="relative h-64">
+                            <canvas id="problemChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-card neon-glow rounded-2xl p-6 hover-lift">
+                        <h3 class="text-lg font-bold mb-4 bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent">หน่วยงานที่พบปัญหา</h3>
+                        <div class="relative h-64">
+                            <canvas id="departmentChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Issues -->
+                <div class="glass-card neon-glow rounded-2xl p-4 md:p-6 hover-lift">
+                    <div class="flex items-center justify-between mb-6">
+                        <h3 class="text-lg md:text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">ปัญหาที่แจ้งเข้ามาล่าสุด</h3>
+                        <div class="flex items-center space-x-2">
+                            <div class="w-2 h-2 bg-purple-400 rounded-full animate-pulse"></div>
+                            <span class="text-xs text-gray-400 hidden sm:inline">อัปเดตล่าสุด</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Desktop & Tablet Table View -->
+                    <div class="hidden md:block overflow-x-auto">
+                        <div class="min-w-full">
+                            <table class="w-full">
+                                <thead>
+                                    <tr class="border-b border-white/20">
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">วันที่</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">เวลา</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">ชื่อ นามสกุล</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">หน่วยงาน</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">ประเภทปัญหา</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">สถานะ</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">สถานะ SLA</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="recentIssuesTable">
+                                    <!-- Data will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Mobile Card View -->
+                    <div class="md:hidden space-y-3" id="recentIssuesCards">
+                        <!-- Cards will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Report Problem Page -->
+            <div id="reportPage" class="hidden p-3 sm:p-4 md:p-6 lg:p-8">
+                <!-- Header Section with Enhanced Design -->
+                <div class="mb-6 sm:mb-8 fade-in text-center">
+                    <div class="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-green-500 via-blue-600 to-purple-600 rounded-2xl sm:rounded-3xl mb-4 sm:mb-6 neon-glow shadow-2xl">
+                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M20,18C20.5,18 21,17.5 21,17V7C21,6.5 20.5,6 20,6H4C3.5,6 3,6.5 3,7V17C3,17.5 3.5,18 4,18H20M20,4A2,2 0 0,1 22,6V18A2,2 0 0,1 20,20H4A2,2 0 0,1 2,18V6A2,2 0 0,1 4,4H20M5,8H19V16H5V8Z"/>
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-green-400 via-blue-400 to-purple-400 bg-clip-text text-transparent leading-tight">
+                        แจ้งปัญหา
+                    </h1>
+                    <p class="text-gray-300 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed px-4">
+                        กรอกข้อมูลเพื่อแจ้งปัญหาด้านเทคโนโลยีสารสนเทศ
+                    </p>
+                    <div class="w-16 sm:w-20 h-0.5 bg-gradient-to-r from-green-500 to-purple-500 mx-auto mt-3 sm:mt-4 rounded-full"></div>
+                </div>
+
+                <!-- Form Container with Enhanced Responsive Design -->
+                <div class="max-w-5xl mx-auto">
+                    <div class="glass-card neon-glow rounded-2xl sm:rounded-3xl p-4 sm:p-6 lg:p-8 hover-lift relative overflow-hidden">
+                        <!-- Background Pattern -->
+                        <div class="absolute inset-0 opacity-5">
+                            <div class="absolute top-0 right-0 w-32 h-32 sm:w-48 sm:h-48 bg-gradient-to-br from-green-500 to-blue-500 rounded-full -mr-16 -mt-16 sm:-mr-24 sm:-mt-24"></div>
+                            <div class="absolute bottom-0 left-0 w-24 h-24 sm:w-36 sm:h-36 bg-gradient-to-tr from-purple-500 to-pink-500 rounded-full -ml-12 -mb-12 sm:-ml-18 sm:-mb-18"></div>
+                        </div>
+
+                        <!-- Form Header -->
+                        <div class="relative z-10 mb-6 sm:mb-8">
+                            <div class="flex items-center justify-center mb-4">
+                                <div class="flex items-center space-x-2 sm:space-x-3">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                                    <span class="text-xs sm:text-sm text-gray-400 font-medium">ฟอร์มแจ้งปัญหา</span>
+                                    <div class="w-2 h-2 bg-blue-400 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <form id="problemForm" class="relative z-10 space-y-4 sm:space-y-6">
+                            <!-- Personal Information Section -->
+                            <div class="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/10">
+                                <div class="flex items-center mb-4 sm:mb-6">
+                                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg sm:rounded-xl flex items-center justify-center mr-3 sm:mr-4">
+                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base sm:text-lg font-bold text-white">ข้อมูลผู้แจ้ง</h3>
+                                        <p class="text-xs sm:text-sm text-gray-400">กรอกชื่อและนามสกุล</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
+                                    <div class="space-y-2">
+                                        <label class="block text-sm sm:text-base font-semibold text-gray-300 flex items-center">
+                                            <span class="text-red-400 mr-1">*</span>
+                                            ชื่อ
+                                        </label>
+                                        <div class="relative">
+                                            <input type="text" id="firstName" class="input-field w-full px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl focus:outline-none text-white placeholder-gray-400 text-sm sm:text-base transition-all duration-300" placeholder="กรอกชื่อ" required>
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                                <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label class="block text-sm sm:text-base font-semibold text-gray-300 flex items-center">
+                                            <span class="text-red-400 mr-1">*</span>
+                                            นามสกุล
+                                        </label>
+                                        <div class="relative">
+                                            <input type="text" id="lastName" class="input-field w-full px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl focus:outline-none text-white placeholder-gray-400 text-sm sm:text-base transition-all duration-300" placeholder="กรอกนามสกุล" required>
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                                                <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Department Section -->
+                            <div class="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/10">
+                                <div class="flex items-center mb-4 sm:mb-6">
+                                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg sm:rounded-xl flex items-center justify-center mr-3 sm:mr-4">
+                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base sm:text-lg font-bold text-white">หน่วยงาน</h3>
+                                        <p class="text-xs sm:text-sm text-gray-400">เลือกหน่วยงานที่สังกัด</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-2">
+                                    <label class="block text-sm sm:text-base font-semibold text-gray-300 flex items-center">
+                                        <span class="text-red-400 mr-1">*</span>
+                                        หน่วยงาน
+                                    </label>
+                                    <div class="relative">
+                                        <select id="department" class="input-field w-full px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl focus:outline-none text-white text-sm sm:text-base appearance-none cursor-pointer transition-all duration-300" required>
+                                            <option value="">เลือกหน่วยงาน</option>
+                                            <option value="ไอที">ไอที</option>
+                                            <option value="บริหารทั่วไป">บริหารทั่วไป</option>
+                                            <option value="เวชระเบียน">เวชระเบียน</option>
+                                            <option value="ผู้ป่วยนอก">ผู้ป่วยนอก</option>
+                                            <option value="ห้องฉุกเฉิน">ห้องฉุกเฉิน</option>
+                                            <option value="ยาเสพติด / ให้คำปรึกษา">ยาเสพติด / ให้คำปรึกษา</option>
+                                            <option value="ทันตกรรม">ทันตกรรม</option>
+                                            <option value="ห้องคลอด">ห้องคลอด</option>
+                                            <option value="เภสัชกรรม">เภสัชกรรม</option>
+                                            <option value="ห้องแลป / เอกซเรย์">ห้องแลป / เอกซเรย์</option>
+                                            <option value="ผู้ป่วยใน">ผู้ป่วยใน</option>
+                                            <option value="ปฐมภูมิและองค์รวม">ปฐมภูมิและองค์รวม</option>
+                                            <option value="กายภาพบำบัด">กายภาพบำบัด</option>
+                                            <option value="แพทย์แผนไทย">แพทย์แผนไทย</option>
+                                            <option value="จ่ายกลาง">จ่ายกลาง</option>
+                                            <option value="ฝ่ายการพยาบาล">ฝ่ายการพยาบาล</option>
+                                            <option value="ห้องเก็บเงิน">ห้องเก็บเงิน</option>
+                                            <option value="บ้านพักแพทย์">บ้านพักแพทย์</option>
+                                        </select>
+                                        <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                            <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M7 10l5 5 5-5z"/>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Problem Information Section -->
+                            <div class="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/10">
+                                <div class="flex items-center mb-4 sm:mb-6">
+                                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-orange-500 to-red-500 rounded-lg sm:rounded-xl flex items-center justify-center mr-3 sm:mr-4">
+                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                        </svg>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-base sm:text-lg font-bold text-white">รายละเอียดปัญหา</h3>
+                                        <p class="text-xs sm:text-sm text-gray-400">อธิบายปัญหาที่พบให้ละเอียด</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-4 sm:space-y-6">
+                                    <div class="space-y-2">
+                                        <label class="block text-sm sm:text-base font-semibold text-gray-300 flex items-center">
+                                            <span class="text-red-400 mr-1">*</span>
+                                            ประเภทปัญหา
+                                        </label>
+                                        <div class="relative">
+                                            <select id="problemType" class="input-field w-full px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl focus:outline-none text-white text-sm sm:text-base appearance-none cursor-pointer transition-all duration-300" required>
+                                                <option value="">เลือกประเภทปัญหา</option>
+                                                <option value="ระบบคอมพิวเตอร์และอุปกรณ์">ระบบคอมพิวเตอร์และอุปกรณ์</option>
+                                                <option value="ระบบของโปรแกรม">ระบบของโปรแกรม</option>
+                                                <option value="ระบบอินเตอร์เน็ต">ระบบอินเตอร์เน็ต</option>
+                                                <option value="ปรึกษาข้อมูลสารสนเทศ">ปัญหาเกี่ยวกับเทคโนโลยีสารสนเทศอื่น ๆ</option>
+                                            </select>
+                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                                                <svg class="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M7 10l5 5 5-5z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-y-2">
+                                        <label class="block text-sm sm:text-base font-semibold text-gray-300 flex items-center">
+                                            <span class="text-red-400 mr-1">*</span>
+                                            รายละเอียดปัญหา
+                                        </label>
+                                        <div class="relative">
+                                            <textarea id="problemDetail" rows="4" class="input-field w-full px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl focus:outline-none text-white placeholder-gray-400 resize-none text-sm sm:text-base transition-all duration-300 min-h-[100px] sm:min-h-[120px]" placeholder="เช่น โปรแกรม HOSxP ใช้งานไม่ได้" required></textarea>
+                                            <div class="absolute bottom-3 right-3">
+                                                <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                        <!--<div class="flex items-center justify-between text-xs text-gray-400 mt-2">
+                                            <span>💡 เคล็ดลับ: อธิบายปัญหาให้ละเอียดจะช่วยให้แก้ไขได้เร็วขึ้น</span>
+                                            <span id="charCount" class="hidden sm:inline">0/500</span>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="pt-4 sm:pt-6">
+                                <button type="submit" class="btn-primary w-full py-4 sm:py-5 rounded-xl sm:rounded-2xl font-bold text-white transition-all duration-300 transform hover:scale-[1.02] shadow-2xl text-sm sm:text-base lg:text-lg relative overflow-hidden group">
+                                    <div class="absolute inset-0 bg-gradient-to-r from-green-600 via-blue-600 to-purple-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    <span class="relative z-10 flex items-center justify-center">
+                                        <svg class="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 group-hover:rotate-12 transition-transform duration-300" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                                        </svg>
+                                        ส่งรายงานปัญหา
+                                        <div class="ml-2 sm:ml-3 w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                                    </span>
+                                </button>
+                                
+                                <!-- Additional Info
+                                <div class="mt-4 sm:mt-6 text-center">
+                                    <div class="inline-flex items-center space-x-2 text-xs sm:text-sm text-gray-400 bg-white/5 rounded-full px-4 py-2 border border-white/10">
+                                        <svg class="w-4 h-4 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                                        </svg>
+                                        <span>ทีมงาน IT จะติดต่อกลับภายใน 30 นาที</span>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Manage Problems Page (Admin Only) -->
+            <div id="managePage" class="hidden p-3 sm:p-4 md:p-6 lg:p-8">
+                <!-- Enhanced Header Section -->
+                <div class="mb-6 sm:mb-8 fade-in text-center">
+                    <div class="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-purple-500 via-pink-600 to-red-600 rounded-2xl sm:rounded-3xl mb-4 sm:mb-6 neon-glow shadow-2xl">
+                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-purple-400 via-pink-400 to-red-400 bg-clip-text text-transparent leading-tight">
+                        จัดการปัญหา
+                    </h1>
+                    <p class="text-gray-300 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed px-4">
+                        จัดการและติดตามสถานะปัญหาที่แจ้งเข้ามา
+                    </p>
+                    <div class="w-16 sm:w-20 h-0.5 bg-gradient-to-r from-purple-500 to-red-500 mx-auto mt-3 sm:mt-4 rounded-full"></div>
+                </div>
+
+                <!-- Stats Cards (Mobile Friendly) -->
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
+                    <div class="glass-morphism rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white/10 hover-lift">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-xs sm:text-sm text-gray-400 mb-1">ทั้งหมด</div>
+                                <div class="text-lg sm:text-xl font-bold text-blue-400" id="manageTotal">0</div>
+                            </div>
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-morphism rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white/10 hover-lift">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-xs sm:text-sm text-gray-400 mb-1">รอดำเนินการ</div>
+                                <div class="text-lg sm:text-xl font-bold text-yellow-400" id="managePending">0</div>
+                            </div>
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-yellow-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22C6.47,22 2,17.5 2,12A10,10 0 0,1 12,2M12.5,7V12.25L17,14.92L16.25,16.15L11,13V7H12.5Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-morphism rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white/10 hover-lift">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-xs sm:text-sm text-gray-400 mb-1">กำลังดำเนินการ</div>
+                                <div class="text-lg sm:text-xl font-bold text-purple-400" id="manageProgress">0</div>
+                            </div>
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20A8,8 0 0,0 20,12A8,8 0 0,0 12,4M12,6A6,6 0 0,1 18,12H16A4,4 0 0,0 12,8V6M10,12A2,2 0 0,1 12,10A2,2 0 0,1 14,12A2,2 0 0,1 12,14A2,2 0 0,1 10,12Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-morphism rounded-xl sm:rounded-2xl p-3 sm:p-4 border border-white/10 hover-lift">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <div class="text-xs sm:text-sm text-gray-400 mb-1">เสร็จสิ้น</div>
+                                <div class="text-lg sm:text-xl font-bold text-green-400" id="manageCompleted">0</div>
+                            </div>
+                            <div class="w-8 h-8 sm:w-10 sm:h-10 bg-green-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-4 h-4 sm:w-5 sm:h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z"/>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Desktop Table View -->
+                <div class="hidden xl:block glass-card neon-glow rounded-2xl sm:rounded-3xl p-4 sm:p-6 hover-lift mb-6">
+                    <div class="overflow-x-auto">
+                        <div class="min-w-full">
+                            <table class="w-full table-auto">
+                                <thead>
+                                    <tr class="border-b border-white/20">
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">วันที่</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">เวลา</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">ชื่อ นามสกุล</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">หน่วยงาน</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">ประเภทปัญหา</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">รายละเอียด</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">สถานะ</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">สถานะ SLA</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">ผู้ดำเนินการ</th>
+                                        <th class="text-left py-4 px-3 font-semibold text-gray-300 text-sm">การจัดการ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="manageIssuesTable">
+                                    <!-- Data will be populated here -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile/Tablet Card View -->
+                <div class="xl:hidden space-y-3 sm:space-y-4" id="manageIssuesCards">
+                    <!-- Cards will be populated here -->
+                </div>
+                
+                <!-- Enhanced Pagination Controls -->
+                <div id="managePagination" class="mt-6 sm:mt-8">
+                    <!-- Page Info -->
+                    <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 mb-4">
+                        <div class="glass-morphism rounded-lg px-4 py-2 border border-white/10">
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                </svg>
+                                <span class="text-sm text-gray-300 font-medium" id="managePageInfo">แสดง 1-10 จาก 0 รายการ</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Quick Stats -->
+                        <div class="flex items-center space-x-2 text-xs text-gray-400">
+                            <div class="flex items-center space-x-1">
+                                <div class="w-2 h-2 bg-yellow-400 rounded-full"></div>
+                                <span>รอดำเนินการ</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <div class="w-2 h-2 bg-purple-400 rounded-full"></div>
+                                <span>กำลังดำเนินการ</span>
+                            </div>
+                            <div class="flex items-center space-x-1">
+                                <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                                <span>เสร็จสิ้น</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination Buttons -->
+                    <div class="flex justify-center">
+                        <div class="glass-morphism rounded-xl p-2 border border-white/10">
+                            <div class="flex items-center space-x-1" id="managePaginationButtons">
+                                <!-- Buttons will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reports Page (Admin Only) -->
+            <div id="reportsPage" class="hidden p-3 sm:p-4 md:p-6 lg:p-8">
+                <!-- Enhanced Header Section -->
+                <div class="mb-6 sm:mb-8 fade-in text-center">
+                    <div class="inline-flex items-center justify-center w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-orange-500 via-red-600 to-pink-600 rounded-2xl sm:rounded-3xl mb-4 sm:mb-6 neon-glow shadow-2xl">
+                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                        </svg>
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2 sm:mb-3 bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 bg-clip-text text-transparent leading-tight">
+                        รายงานสรุป
+                    </h1>
+                    <p class="text-gray-300 text-sm sm:text-base lg:text-lg max-w-2xl mx-auto leading-relaxed px-4">
+                        รายงานสรุปปัญหาด้านเทคโนโลยีสารสนเทศ พร้อมข้อมูล SLA และสถิติการดำเนินงาน
+                    </p>
+                    <div class="w-16 sm:w-20 h-0.5 bg-gradient-to-r from-orange-500 to-pink-500 mx-auto mt-3 sm:mt-4 rounded-full"></div>
+                </div>
+
+                <!-- Action Bar -->
+                <div class="mb-6 sm:mb-8">
+                    <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+                        <!-- Summary Stats -->
+                        <div class="flex items-center space-x-4 text-sm">
+                            <div class="glass-morphism rounded-lg px-3 py-2 border border-white/10">
+                                <div class="flex items-center space-x-2">
+                                    <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                                    </svg>
+                                    <span class="text-gray-300 font-medium">รายงานทั้งหมด</span>
+                                    <span class="text-blue-400 font-bold" id="reportsTotal">0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="hidden sm:flex items-center space-x-2 text-xs text-gray-400">
+                                <div class="flex items-center space-x-1">
+                                    <div class="w-2 h-2 bg-green-400 rounded-full"></div>
+                                    <span>SLA ตรงเวลา</span>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <div class="w-2 h-2 bg-red-400 rounded-full"></div>
+                                    <span>SLA เกินเวลา</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Export Button -->
+                        <button onclick="exportToExcel()" class="btn-success px-4 sm:px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105 flex items-center shadow-lg">
+                            <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                            </svg>
+                            <span class="hidden sm:inline">ส่งออกทั้งหมด Excel</span>
+                            <span class="sm:hidden">Excel</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- Filter Section -->
+<div class="glass-card neon-glow rounded-2xl p-6 mb-6 shadow-2xl">
+    <h3 class="text-lg font-bold mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+      🔍 ตัวกรองรายงาน
+    </h3>
+  
+    <!-- ฟิลเตอร์ -->
+    <div class="flex flex-wrap gap-4">
+      <!-- วันที่เริ่มต้น -->
+      <div class="flex flex-col min-w-[180px] flex-1">
+        <label class="text-sm text-gray-300 mb-1">วันที่เริ่มต้น</label>
+        <input type="date" id="startDate" class="input-field px-3 py-2 rounded-xl text-white">
+      </div>
+  
+      <!-- วันที่สิ้นสุด -->
+      <div class="flex flex-col min-w-[180px] flex-1">
+        <label class="text-sm text-gray-300 mb-1">วันที่สิ้นสุด</label>
+        <input type="date" id="endDate" class="input-field px-3 py-2 rounded-xl text-white">
+      </div>
+  
+      <!-- หน่วยงาน -->
+      <div class="flex flex-col min-w-[160px] flex-1">
+        <label class="text-sm text-gray-300 mb-1">หน่วยงาน</label>
+        <select id="deptFilter" class="input-field px-3 py-2 rounded-xl text-white">
+          <option value="">-- ทั้งหมด --</option>
+          <option value="ไอที">ไอที</option>
+        <option value="บริหารทั่วไป">บริหารทั่วไป</option>
+        <option value="เวชระเบียน">เวชระเบียน</option>
+        <option value="ผู้ป่วยนอก">ผู้ป่วยนอก</option>
+        <option value="ห้องฉุกเฉิน">ห้องฉุกเฉิน</option>
+        <option value="ยาเสพติด / ให้คำปรึกษา">ยาเสพติด / ให้คำปรึกษา</option>
+        <option value="ทันตกรรม">ทันตกรรม</option>
+        <option value="ห้องคลอด">ห้องคลอด</option>
+        <option value="เภสัชกรรม">เภสัชกรรม</option>
+        <option value="ห้องแลป / เอกซเรย์">ห้องแลป / เอกซเรย์</option>
+        <option value="ผู้ป่วยใน">ผู้ป่วยใน</option>
+        <option value="ปฐมภูมิและองค์รวม">ปฐมภูมิและองค์รวม</option>
+        <option value="กายภาพบำบัด">กายภาพบำบัด</option>
+        <option value="แพทย์แผนไทย">แพทย์แผนไทย</option>
+        <option value="จ่ายกลาง">จ่ายกลาง</option>
+        <option value="ฝ่ายการพยาบาล">ฝ่ายการพยาบาล</option>
+        <option value="ห้องเก็บเงิน">ห้องเก็บเงิน</option>
+        <option value="บ้านพักแพทย์">บ้านพักแพทย์</option>
+        </select>
+      </div>
+  
+      <!-- ประเภทปัญหา -->
+      <div class="flex flex-col min-w-[160px] flex-1">
+        <label class="text-sm text-gray-300 mb-1">ประเภทปัญหา</label>
+        <select id="typeFilter" class="input-field px-3 py-2 rounded-xl text-white">
+            <option value="">-- ทั้งหมด --</option>
+            <option value="ระบบคอมพิวเตอร์และอุปกรณ์">ระบบคอมพิวเตอร์และอุปกรณ์</option>
+            <option value="ระบบของโปรแกรม">ระบบของโปรแกรม</option>
+            <option value="ระบบอินเตอร์เน็ต">ระบบอินเตอร์เน็ต</option>
+            <option value="ปรึกษาข้อมูลสารสนเทศ">ปัญหาเกี่ยวกับเทคโนโลยีสารสนเทศอื่น ๆ</option>
+        </select>
+      </div>
+  
+      <!-- สถานะการดำเนินการ -->
+      <div class="flex flex-col min-w-[180px] flex-1">
+        <label class="text-sm text-gray-300 mb-1">สถานะการดำเนินการ</label>
+        <select id="statusFilter" class="input-field px-3 py-2 rounded-xl text-white">
+          <option value="">-- ทั้งหมด --</option>
+          <option value="รอดำเนินการ">รอดำเนินการ</option>
+          <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+          <option value="เสร็จสิ้น">เสร็จสิ้น</option>
+        </select>
+      </div>
+  
+      <!-- สถานะ SLA -->
+      <div class="flex flex-col min-w-[160px] flex-1">
+        <label class="text-sm text-gray-300 mb-1">สถานะ SLA</label>
+        <select id="slaFilter" class="input-field px-3 py-2 rounded-xl text-white">
+          <option value="">-- ทั้งหมด --</option>
+          <option value="ตรงเวลา">ตรงเวลา</option>
+          <option value="เกินเวลา">เกินเวลา</option>
+        </select>
+      </div>
+    </div>
+  
+    <!-- ปุ่ม -->
+    <div class="mt-6 flex flex-wrap gap-3 justify-end">
+      <button onclick="filterNotifyReports()" 
+        class="px-6 py-2 rounded-xl font-bold text-white text-sm shadow-lg bg-green-600 hover:bg-green-700 transition">
+        กรอง
+      </button>
+      <button onclick="clearFilters()" 
+        class="px-6 py-2 rounded-xl font-bold text-white text-sm shadow-lg bg-gray-600 hover:bg-gray-700 transition">
+        ล้างตัวกรอง
+      </button>
+      <button onclick="exportFilteredToExcel()" 
+        class="px-6 py-2 rounded-xl font-bold text-white text-sm shadow-lg bg-blue-600 hover:bg-blue-700 transition">
+        📥 Export Excel
+      </button>
+    </div>
+  </div>
+  
+  
+                <!-- Desktop Table View -->
+                <div class="hidden lg:block glass-card neon-glow rounded-2xl sm:rounded-3xl p-4 sm:p-6 hover-lift mb-6">
+                    <div class="overflow-x-auto">
+                        <table class="w-full" id="reportsTable">
+                            <thead>
+                                <tr class="border-b border-white/20">
+                                    <th class="text-left py-4 px-4 font-semibold text-gray-300 text-sm">วันที่</th>
+                                    <th class="text-left py-4 px-4 font-semibold text-gray-300 text-sm">เวลาที่แจ้ง</th>
+                                    <th class="text-left py-4 px-4 font-semibold text-gray-300 text-sm">ชื่อ นามสกุล</th>
+                                    <th class="text-left py-4 px-4 font-semibold text-gray-300 text-sm">หน่วยงาน</th>
+                                    <th class="text-left py-4 px-4 font-semibold text-gray-300 text-sm">ประเภทปัญหา</th>
+                                    <th class="text-left py-4 px-4 font-semibold text-gray-300 text-sm">สถานะการดำเนินการ</th>
+                                    <th class="text-left py-4 px-4 font-semibold text-gray-300 text-sm">สถานะ SLA</th>
+                                    <th class="text-left py-4 px-4 font-semibold text-gray-300 text-sm">ผู้ดำเนินการ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reportsTableBody">
+                                <!-- Data will be populated here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Mobile/Tablet Card View -->
+                <div class="lg:hidden space-y-3 sm:space-y-4 mb-6" id="reportsCards">
+                    <!-- Cards will be populated here -->
+                </div>
+                
+                <!-- Enhanced Pagination Controls -->
+                <div id="reportsPagination" class="mt-6 sm:mt-8">
+                    <!-- Page Info -->
+                    <div class="flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0 mb-4">
+                        <div class="glass-morphism rounded-lg px-4 py-2 border border-white/10">
+                            <div class="flex items-center space-x-2">
+                                <svg class="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                </svg>
+                                <span class="text-sm text-gray-300 font-medium" id="reportsPageInfo">แสดง 1-10 จาก 0 รายการ</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Filter Options (Future Enhancement) -->
+                        <div class="flex items-center space-x-2 text-xs text-gray-400">
+                            <div class="flex items-center space-x-1">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <span>เรียงตามวันที่ล่าสุด</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Pagination Buttons -->
+                    <div class="flex justify-center">
+                        <div class="glass-morphism rounded-xl p-2 border border-white/10">
+                            <div class="flex items-center space-x-1" id="reportsPaginationButtons">
+                                <!-- Buttons will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Popup Modal -->
+    <div id="popup" class="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 hidden">
+        <div class="glass-card neon-glow rounded-3xl p-8 max-w-md w-full mx-4 hover-lift">
+            <div class="text-center">
+                <div id="popupIcon" class="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center">
+                    <!-- Icon will be inserted here -->
+                </div>
+                <h3 id="popupTitle" class="text-2xl font-bold mb-4"></h3>
+                <p id="popupMessage" class="text-gray-300 mb-8 leading-relaxed"></p>
+                <button onclick="closePopup()" class="btn-primary px-8 py-3 rounded-xl transition-all font-semibold">
+                    ตกลง
+                </button>
+            </div>
+        </div>
+    </div> 
+
+    <!-- Edit Issue Modal -->
+    <div id="editModal" class="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 hidden">
+        <div class="glass-card neon-glow rounded-3xl p-8 max-w-lg w-full mx-4 hover-lift">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">แก้ไขปัญหา</h3>
+                <button onclick="closeEditModal()" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <form id="editForm" class="space-y-6">
+                <input type="hidden" id="editIssueId">
+                <input type="hidden" id="editFirstName">
+                <input type="hidden" id="editLastName">
+                <input type="hidden" id="editDepartment">
+
+                
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-300">สถานะการดำเนินการ</label>
+                    <select id="editStatus" class="input-field w-full px-4 py-4 rounded-xl focus:outline-none text-white" required>
+                        <option value="">เลือกสถานะการดำเนินการ</option>
+                        <option value="รอดำเนินการ">รอดำเนินการ</option>
+                        <option value="กำลังดำเนินการ">กำลังดำเนินการ</option>
+                        <option value="เสร็จสิ้น">เสร็จสิ้น</option>
+                    </select>
+                </div>
+                
+                <div class="space-y-2">
+                    <label class="block text-sm font-semibold text-gray-300">ผู้ดำเนินการ</label>
+                    <select id="editAssignee" class="input-field w-full px-4 py-4 rounded-xl focus:outline-none text-white" required>
+                        <option value="">เลือกผู้ดำเนินการ</option>
+                        <option value="กัญจนพร ศรีเพ็ชร">กัญจนพร ศรีเพ็ชร</option>
+                        <option value="ณัฏฐจักร สังกัดทอง">ณัฏฐจักร สังกัดทอง</option>
+                    </select>
+                </div>
+                
+                <div class="flex space-x-4">
+                    <button type="submit" class="btn-success flex-1 py-4 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105">
+                        <span class="flex items-center justify-center">
+                            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/>
+                            </svg>
+                            บันทึกการแก้ไข
+                        </span>
+                    </button>
+                    <button type="button" onclick="closeEditModal()" class="btn-danger flex-1 py-4 rounded-xl font-semibold text-white transition-all duration-300 transform hover:scale-105">
+                        ยกเลิก
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let supabase = null;
+        let issues = [];
+        
+        // Pagination variables
+        const itemsPerPage = 10;
+        let currentPage = {
+            manage: 1,
+            reports: 1
+        };
+
+        // Initialize Supabase
+        function initSupabase() {
+            const supabaseUrl = 'https://aspctwdbtgptiniorexb.supabase.co';
+            const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFzcGN0d2RidGdwdGluaW9yZXhiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTU2NzMyMTcsImV4cCI6MjA3MTI0OTIxN30.lqrAhGN0F0VZ_6RiFYde2o-C8XrwxAbBfA8bPKJNE8I';
+            supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+            console.log('✅ Supabase connected successfully!');
+        }
+
+        // Test Supabase connection
+        async function testSupabaseConnection() {
+            try {
+                console.log('🔄 Testing Supabase connection...');
+                
+                // Test basic connection
+                const { data, error } = await supabase.from('it_issues').select('count', { count: 'exact' });
+                if (error) {
+                    console.log('⚠️ Supabase table error:', error);
+                    console.log('⚠️ Table not found or no access, using local storage for now');
+                    return false;
+                }
+                
+                console.log('✅ Supabase database connected and ready!');
+                console.log('📊 Current record count:', data);
+                
+                // Test if we can actually read data
+                const { data: testData, error: testError } = await supabase
+                    .from('it_issues')
+                    .select('*')
+                    .limit(1);
+                
+                if (testError) {
+                    console.log('⚠️ Cannot read data:', testError);
+                    return false;
+                }
+                
+                console.log('✅ Can read data from Supabase');
+                return true;
+                
+            } catch (error) {
+                console.log('⚠️ Supabase connection failed:', error);
+                console.log('⚠️ Using local storage mode');
+                return false;
+            }
+        }
+
+        // ฟังก์ชันอัปเดตสถานะปัญหา
+async function updateStatus(issueId, newStatus) {
+    const now = new Date().toISOString();
+    let updateData = { status: newStatus, updated_at: now };
+
+    // ดึงข้อมูล Issue ปัจจุบันจาก Supabase
+    const { data: issueData, error: fetchError } = await supabase
+        .from('it_issues')
+        .select('*')
+        .eq('id', issueId)
+        .single();
+
+    if (fetchError) {
+        console.error('Error fetching issue:', fetchError);
+        return;
+    }
+
+    const issue = issueData;
+
+    // ถ้าเริ่มดำเนินการ → บันทึก started_at
+    if (newStatus === 'กำลังดำเนินการ') {
+        updateData.started_at = now;
+    }
+
+    // ถ้าเสร็จสิ้น → บันทึก completed_at และคำนวณ SLA (ถ้ามีการกำหนด SLA)
+    if (newStatus === 'เสร็จสิ้น') {
+        updateData.completed_at = now;
+
+        if (issue.sla_hours) {
+            const createdAt = new Date(issue.created_at);
+            const completedAt = new Date(now);
+            const diffInHours = (completedAt - createdAt) / (1000 * 60 * 60);
+
+            // ตรวจสอบว่าอยู่ใน SLA หรือเกินเวลา
+            updateData.sla_result = diffInHours <= issue.sla_hours ? 'within' : 'exceeded';
+        } else {
+            updateData.sla_result = null; // ไม่มีการกำหนด SLA
+        }
+    }
+
+    // อัปเดตข้อมูลใน Supabase
+    const { error: updateError } = await supabase
+        .from('it_issues')
+        .update(updateData)
+        .eq('id', issueId);
+
+    if (updateError) {
+        console.error('Update status error:', updateError);
+    } else {
+        console.log('Status updated successfully');
+        loadDashboard(); // โหลดแดชบอร์ดใหม่หลังอัปเดตสถานะ
+    }
+}
+
+// Mapping Keyword → SLA นาที
+const slaConfig = {
+    "hosxp|โปรแกรม|error|เข้าไม่ได้|ใช้งานไม่ได้|ระบบโปรแกรม": 20,  // 20 นาที
+    "คอมพิวเตอร์|pc|โน้ตบุ๊ก|laptop|เครื่องพิมพ์|printer|สแกนเนอร์|mouse|keyboard|เปิดไม่ติด": 30, // 30 นาที
+    "อินเตอร์เน็ต|internet|เน็ตหลุด|เน็ตช้า|wifi|lan|network|เชื่อมต่อไม่ได้": 30, // 30 นาที
+    "server|แม่ข่าย|ฐานข้อมูล|database|db|ระบบกลาง|down|ขัดข้อง": 45, // 45 นาที
+    "ติดตั้ง|setup|install|ประกอบ|config|ตั้งค่า|เชื่อมต่อ|อุปกรณ์ใหม่": 120, // 2 ชั่วโมง
+    "เว็บไซต์|web|site|หน้าเว็บ|ข่าวสาร|อัปโหลด|update|โพสต์|โรงพยาบาล": 1440 // 1 วัน
+};
+
+// ฟังก์ชันหาค่า SLA ตามรายละเอียดปัญหา
+function detectSLA(problemDetail) {
+    for (const [keywords, minutes] of Object.entries(slaConfig)) {
+        const regex = new RegExp(keywords, "i");
+        if (regex.test(problemDetail)) {
+            return minutes;
+        }
+    }
+    return null; // ไม่มีการกำหนด SLA
+}
+
+        async function createIssue(issueData) {
+    const slaMinutes = detectSLA(issueData.problem_detail);
+
+    const { data, error } = await supabase
+        .from('it_issues')
+        .insert([{
+            ...issueData,
+            sla_minutes: slaMinutes,
+            sla_status: slaMinutes ? 'รอดำเนินการ' : 'ไม่มีการกำหนด SLA'
+        }]);
+
+    if (error) {
+        console.error('Create issue error:', error);
+    } else {
+        console.log('Issue created:', data);
+    }
+}
+
+    function calculateSLA(issue) {
+    const slaMinutes = issue.sla_minutes;
+    const status = issue.status;
+    const createdAt = new Date(issue.created_at);
+    const startedAt = issue.started_at ? new Date(issue.started_at) : null;
+    const completedAt = issue.completed_at ? new Date(issue.completed_at) : null;
+
+    if (!slaMinutes || slaMinutes <= 0) {
+        return {
+            status: null,
+            isOverdue: false,
+            remainingMinutes: null,
+            completedInTime: null
+        };
+    }
+
+    const start = startedAt || createdAt;
+    let end = new Date();
+    if (status === 'เสร็จสิ้น' && completedAt) {
+        end = completedAt;
+    }
+
+    const diffMinutes = Math.floor((end - start) / (1000 * 60));
+    const remainingMinutes = slaMinutes - diffMinutes;
+
+    if (status === 'เสร็จสิ้น') {
+        return {
+            status: diffMinutes <= slaMinutes ? 'ตรงเวลา' : 'เกินเวลา',
+            isOverdue: diffMinutes > slaMinutes,
+            remainingMinutes: remainingMinutes,
+            completedInTime: diffMinutes <= slaMinutes
+        };
+    }
+
+    return {
+        status: remainingMinutes >= 0 ? 'ยังไม่เกินเวลา' : 'เกินเวลา',
+        isOverdue: remainingMinutes < 0,
+        remainingMinutes: remainingMinutes,
+        completedInTime: null
+    };
+}
+
+
+
+
+
+
+        // Initialize application
+        document.addEventListener('DOMContentLoaded', async function() {
+            initSupabase();
+            
+            // Test connection and load data
+            const isConnected = await testSupabaseConnection();
+            if (isConnected) {
+                await loadDataFromSupabase();
+            } else {
+                loadSampleData();
+            }
+            
+            // Login form handler
+            document.getElementById('loginForm').addEventListener('submit', handleLogin);
+            
+            // Problem form handler
+            document.getElementById('problemForm').addEventListener('submit', handleProblemSubmit);
+            
+            // Edit form handler
+            document.getElementById('editForm').addEventListener('submit', handleEditSubmit);
+
+            document.getElementById('problemForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const department = document.getElementById('department').value;
+                const problemType = document.getElementById('problemType').value;
+                const problemDetail = document.getElementById('problemDetail').value;
+
+    await sendLineNotify(message);
+
+        });
+
+            
+        });
+
+        // Load data from Supabase
+        async function loadDataFromSupabase() {
+            try {
+                const { data, error } = await supabase
+                    .from('it_issues')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) {
+                    console.error('Error loading data:', error);
+                    loadSampleData();
+                    return;
+                }
+                
+                issues = data || [];
+                console.log(`✅ Loaded ${issues.length} issues from Supabase`);
+                
+            } catch (error) {
+                console.error('Error connecting to Supabase:', error);
+                loadSampleData();
+            }
+        }
+
+        // Handle login
+        async function handleLogin(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Check credentials
+            if ((username === 'admin' && password === 'ittkd11281') || 
+                (username === 'tkd' && password === 'tkd')) {
+                
+                currentUser = {
+                    username: username,
+                    isAdmin: username === 'admin'
+                };
+                
+                // Show success popup
+                showPopup('success', 'เข้าสู่ระบบสำเร็จ', 'ยินดีต้อนรับเข้าสู่ระบบแจ้งปัญหาด้านเทคโนโลยีสารสนเทศ');
+                
+                setTimeout(() => {
+                    closePopup();
+                    showMainApp();
+                }, 2000);
+                
+            } else {
+                showPopup('error', 'เข้าสู่ระบบไม่สำเร็จ', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
+            }
+        }
+
+        // Show main application
+        function showMainApp() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+            
+            // Show/hide admin menus
+            if (currentUser.isAdmin) {
+                document.getElementById('manageBtn').classList.remove('hidden');
+                document.getElementById('reportsBtn').classList.remove('hidden');
+            }
+            
+            // Load dashboard
+            showPage('dashboard');
+        }
+
+        // Show page
+        function showPage(page) {
+            // Hide all pages
+            document.querySelectorAll('[id$="Page"]').forEach(p => p.classList.add('hidden'));
+            
+            // Show selected page
+            document.getElementById(page + 'Page').classList.remove('hidden');
+            
+            // Update navigation
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.closest('.nav-item').classList.add('active');
+            
+            // Load page data
+            if (page === 'dashboard') {
+                loadDashboard();
+            } else if (page === 'manage') {
+                loadManageIssues();
+            } else if (page === 'reports') {
+                loadReports();
+            }
+        }
+
+        // Handle problem submission
+        async function handleProblemSubmit(e) {
+            e.preventDefault();
+            
+            try {
+                const formData = {
+                    first_name: document.getElementById('firstName').value,
+                    last_name: document.getElementById('lastName').value,
+                    department: document.getElementById('department').value,
+                    problem_type: document.getElementById('problemType').value,
+                    problem_detail: document.getElementById('problemDetail').value,
+                    status: 'รอดำเนินการ',
+                    reporter: currentUser.username
+                };
+                
+                // Try to save to Supabase first
+                const { data, error } = await supabase
+                    .from('it_issues')
+                    .insert([formData])
+                    .select();
+                
+                if (error) {
+                    console.error('Supabase error:', error);
+                    // Fallback to local storage
+                    const newIssue = {
+                        id: Date.now(),
+                        ...formData,
+                        created_at: new Date().toISOString()
+                    };
+                    issues.unshift(newIssue); // Add to beginning of array
+                    localStorage.setItem('itIssues', JSON.stringify(issues));
+                } else {
+                    console.log('✅ Issue saved to Supabase:', data);
+                    // Add to local issues array at the beginning
+                    issues.unshift(data[0]);
+                }
+                
+                // Reset form
+                document.getElementById('problemForm').reset();
+                
+                // Refresh dashboard if it's currently visible
+                if (!document.getElementById('dashboardPage').classList.contains('hidden')) {
+                    loadDashboard();
+                }
+                
+                // Show success popup
+                showPopup('success', 'ส่งรายงานสำเร็จ', 'ปัญหาได้รับการบันทึกเรียบร้อยแล้ว');
+                
+            } catch (error) {
+                console.error('Error submitting problem:', error);
+                showPopup('error', 'เกิดข้อผิดพลาด', 'ไม่สามารถส่งรายงานได้ กรุณาตรวจสอบข้อมูลและลองใหม่อีกครั้ง');
+            }
+        }
+
+        // Load dashboard
+        async function loadDashboard() {
+    // ✅ ดึงข้อมูลจาก Supabase
+    const { data: issues, error } = await supabase
+        .from('it_issues')
+        .select('*');
+
+    if (error) {
+        console.error('Error loading issues:', error);
+        return;
+    }
+
+    // ✅ คำนวณสถิติสถานะ
+    const total = issues.length;
+    const pending = issues.filter(i => i.status === 'รอดำเนินการ').length;
+    const inProgress = issues.filter(i => i.status === 'กำลังดำเนินการ').length;
+    const completed = issues.filter(i => i.status === 'เสร็จสิ้น').length;
+
+    // ✅ คำนวณสถิติ SLA (เฉพาะที่มีการกำหนด SLA)
+    let slaOnTime = 0;
+    let slaOverdue = 0;
+
+    issues.forEach(issue => {
+        // ใช้ calculateSLA() ตรวจสอบเฉพาะ Issue ที่มี SLA
+        if (issue.sla_minutes && issue.status === 'เสร็จสิ้น') {
+            const sla = calculateSLA(issue);
+            if (sla.completedInTime) {
+                slaOnTime++;
+            } else {
+                slaOverdue++;
+            }
+        }
+    });
+
+    // ✅ อัปเดต Dashboard Cards พร้อม Animation
+    animateCounter('totalIssues', total);
+    animateCounter('pendingIssues', pending);
+    animateCounter('inProgressIssues', inProgress);
+    animateCounter('completedIssues', completed);
+    animateCounter('slaOnTime', slaOnTime);
+    animateCounter('slaOverdue', slaOverdue);
+    animateCounter('totalSla', slaOnTime + slaOverdue);
+
+    // ✅ โหลด Charts & Recent Issues
+    loadCharts(issues);
+    loadRecentIssues(issues);
+}
+
+
+
+        // Animate counter
+        function animateCounter(elementId, targetValue) {
+            const element = document.getElementById(elementId);
+            const startValue = 0;
+            const duration = 1000;
+            const startTime = performance.now();
+            
+            function updateCounter(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const currentValue = Math.floor(startValue + (targetValue - startValue) * progress);
+                
+                element.textContent = currentValue;
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateCounter);
+                }
+            }
+            
+            requestAnimationFrame(updateCounter);
+        }
+
+        // Draw center text for doughnut chart
+        function drawCenterText(chart, totalCount) {
+            const ctx = chart.ctx;
+            const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
+            const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
+            
+            ctx.save();
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // Draw total number
+            ctx.fillStyle = '#ffffff';
+            ctx.font = `bold ${window.innerWidth < 768 ? '24px' : '32px'} 'Prompt', sans-serif`;
+            ctx.fillText(totalCount, centerX, centerY - (window.innerWidth < 768 ? 8 : 12));
+            
+            // Draw label
+            ctx.fillStyle = '#9ca3af';
+            ctx.font = `${window.innerWidth < 768 ? '12px' : '14px'} 'Prompt', sans-serif`;
+            ctx.fillText('ปัญหาทั้งหมด', centerX, centerY + (window.innerWidth < 768 ? 12 : 16));
+            
+            ctx.restore();
+        }
+
+        // Load charts
+        function loadCharts() {
+            // Problem types chart
+            const problemTypes = {};
+            issues.forEach(issue => {
+                problemTypes[issue.problem_type] = (problemTypes[issue.problem_type] || 0) + 1;
+            });
+            
+            const problemChart = document.getElementById('problemChart');
+            if (problemChart) {
+                const totalProblems = Object.values(problemTypes).reduce((sum, count) => sum + count, 0);
+                
+                new Chart(problemChart, {
+                    type: 'doughnut',
+                    data: {
+                        labels: Object.keys(problemTypes),
+                        datasets: [{
+                            data: Object.values(problemTypes),
+                            backgroundColor: [
+                                'rgba(59, 130, 246, 0.8)',
+                                'rgba(34, 197, 94, 0.8)',
+                                'rgba(234, 179, 8, 0.8)',
+                                'rgba(239, 68, 68, 0.8)',
+                                'rgba(147, 51, 234, 0.8)',
+                                'rgba(6, 182, 212, 0.8)'
+                            ],
+                            borderWidth: 0,
+                            hoverOffset: window.innerWidth < 768 ? 5 : 10,
+                            cutout: window.innerWidth < 768 ? '50%' : '60%'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: window.innerWidth < 768 ? 'bottom' : 'right',
+                                labels: {
+                                    color: 'white',
+                                    padding: window.innerWidth < 768 ? 10 : 15,
+                                    font: {
+                                        size: window.innerWidth < 768 ? 10 : 12
+                                    },
+                                    usePointStyle: true,
+                                    pointStyle: 'circle',
+                                    boxWidth: window.innerWidth < 768 ? 8 : 12
+                                }
+                            },
+                            tooltip: {
+                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                                titleColor: 'white',
+                                bodyColor: 'white',
+                                borderColor: 'rgba(255, 255, 255, 0.2)',
+                                borderWidth: 1,
+                                cornerRadius: 8,
+                                displayColors: true,
+                                titleFont: {
+                                    size: window.innerWidth < 768 ? 12 : 14
+                                },
+                                bodyFont: {
+                                    size: window.innerWidth < 768 ? 11 : 13
+                                }
+                            }
+                        },
+                        layout: {
+                            padding: {
+                                top: window.innerWidth < 768 ? 5 : 10,
+                                bottom: window.innerWidth < 768 ? 5 : 10,
+                                left: window.innerWidth < 768 ? 5 : 10,
+                                right: window.innerWidth < 768 ? 5 : 10
+                            }
+                        },
+                        onHover: (event, activeElements) => {
+                            // Keep center text visible during hover
+                        },
+                        animation: {
+                            onComplete: function() {
+                                drawCenterText(this, totalProblems);
+                            },
+                            onProgress: function() {
+                                drawCenterText(this, totalProblems);
+                            }
+                        }
+                    }
+                });
+            }
+            
+            // Departments chart
+            const departments = {};
+            issues.forEach(issue => {
+                departments[issue.department] = (departments[issue.department] || 0) + 1;
+            });
+            
+            // Sort departments by count (descending - from high to low)
+            const sortedDepartments = Object.entries(departments)
+                .sort(([,a], [,b]) => b - a); // Sort by count descending
+            
+            const departmentChart = document.getElementById('departmentChart');
+            if (departmentChart) {
+                new Chart(departmentChart, {
+                    type: 'bar',
+                    data: {
+                        labels: sortedDepartments.map(([dept]) => dept),
+                        datasets: [{
+                            label: 'จำนวนปัญหา',
+                            data: sortedDepartments.map(([,count]) => count),
+                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                            borderColor: 'rgba(59, 130, 246, 1)',
+                            borderWidth: 2,
+                            borderRadius: 8,
+                            borderSkipped: false
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            }
+                        },
+                        scales: {
+                            x: {
+                                ticks: {
+                                    color: 'white',
+                                    font: {
+                                        size: window.innerWidth < 768 ? 9 : 11
+                                    },
+                                    maxRotation: 45,
+                                    minRotation: 45,
+                                    callback: function(value, index, values) {
+                                        const label = this.getLabelForValue(value);
+                                        // Split long department names into multiple lines
+                                        if (label.length > 12) {
+                                            const words = label.split(' ');
+                                            if (words.length > 1) {
+                                                const mid = Math.ceil(words.length / 2);
+                                                return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+                                            }
+                                        }
+                                        return label;
+                                    }
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)',
+                                    display: false
+                                }
+                            },
+                            y: {
+                                ticks: {
+                                    color: 'white',
+                                    font: {
+                                        size: window.innerWidth < 768 ? 9 : 11
+                                    },
+                                    stepSize: 1
+                                },
+                                grid: {
+                                    color: 'rgba(255, 255, 255, 0.1)'
+                                }
+                            }
+                        },
+                        layout: {
+                            padding: {
+                                top: 15,
+                                bottom: 20,
+                                left: 15,
+                                right: 15
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Load recent issues
+        function loadRecentIssues() {
+    const tbody = document.getElementById('recentIssuesTable');
+    const cardsContainer = document.getElementById('recentIssuesCards');
+
+    const sortedIssues = [...issues].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    const recentIssues = sortedIssues.slice(0, 10);
+
+    // ✅ Desktop table view
+    tbody.innerHTML = recentIssues.map(issue => {
+        const date = new Date(issue.created_at);
+        const sla = calculateSLA(issue);
+
+        // กำหนดข้อความ SLA
+        const slaStatusText = sla.status ? sla.status : '-';
+        const slaClass = sla.status ? (sla.isOverdue ? 'sla-overdue' : 'sla-ontime') : 'sla-none';
+
+        return `
+            <tr class="table-row group">
+                <td class="py-4 px-3 text-gray-300">
+                    <div class="font-medium text-sm whitespace-nowrap">${date.toLocaleDateString('th-TH')}</div>
+                </td>
+                <td class="py-4 px-3 text-gray-300">
+                    <div class="text-sm whitespace-nowrap">${date.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</div>
+                </td>
+                <td class="py-4 px-3">
+                    <div class="font-semibold text-white text-sm group-hover:text-blue-300 transition-colors">
+                        ${issue.first_name} ${issue.last_name}
+                    </div>
+                </td>
+                <td class="py-4 px-3 text-gray-300">
+                    <div class="text-sm max-w-32 truncate" title="${issue.department}">${issue.department}</div>
+                </td>
+                <td class="py-4 px-3 text-gray-300">
+                    <div class="text-sm max-w-48 truncate" title="${issue.problem_type}">${issue.problem_type}</div>
+                </td>
+                <td class="py-4 px-3">
+                    <span class="status-badge ${getStatusClass(issue.status)} text-xs">
+                        ${issue.status}
+                    </span>
+                </td>
+                <td class="py-4 px-3">
+                    <span class="status-badge ${slaClass} text-xs">
+                        ${slaStatusText}
+                    </span>
+                </td>
+            </tr>
+        `;
+    }).join('');
+
+    // ✅ Mobile card view
+    cardsContainer.innerHTML = recentIssues.map((issue, index) => {
+        const date = new Date(issue.created_at);
+        const sla = calculateSLA(issue);
+
+        const slaStatusText = sla.status ? sla.status : '-';
+        const slaClass = sla.status ? (sla.isOverdue ? 'sla-overdue' : 'sla-ontime') : 'sla-none';
+
+        return `
+            <div class="glass-morphism rounded-xl p-4 hover-lift border border-white/10 relative overflow-hidden group">
+                <div class="absolute top-2 right-2 w-6 h-6 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center">
+                    <span class="text-xs font-bold text-white">${index + 1}</span>
+                </div>
+                
+                <div class="flex justify-between items-start mb-4 pr-8">
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-2 mb-1">
+                            <div class="w-2 h-2 bg-blue-400 rounded-full"></div>
+                            <h4 class="font-bold text-white text-base group-hover:text-blue-300 transition-colors">${issue.first_name} ${issue.last_name}</h4>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            <p class="text-sm text-gray-400 font-medium">${issue.department}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex items-center justify-between mb-4 p-3 bg-white/5 rounded-lg border border-white/10">
+                    <div class="flex items-center space-x-2">
+                        <svg class="w-4 h-4 text-blue-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"/>
+                        </svg>
+                        <div>
+                            <div class="text-sm font-semibold text-white">${date.toLocaleDateString('th-TH')}</div>
+                            <div class="text-xs text-gray-400">${date.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-4">
+                    <div class="flex items-start space-x-2">
+                        <svg class="w-4 h-4 text-orange-400 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                        </svg>
+                        <div class="flex-1">
+                            <p class="text-sm text-gray-300 leading-relaxed">${issue.problem_type}</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="flex justify-between items-center pt-3 border-t border-white/10">
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs text-gray-400">สถานะ:</span>
+                        <span class="status-badge ${getStatusClass(issue.status)} text-xs">
+                            ${issue.status}
+                        </span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xs text-gray-400">SLA:</span>
+                        <span class="status-badge ${slaClass} text-xs">
+                            ${slaStatusText}
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="absolute inset-0 bg-gradient-to-r from-blue-500/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl"></div>
+            </div>
+        `;
+    }).join('');
+}
+
+
+        // Load manage issues (Admin only)
+        function loadManageIssues() {
+            if (!currentUser.isAdmin) return;
+            
+            const tbody = document.getElementById('manageIssuesTable');
+            const cardsContainer = document.getElementById('manageIssuesCards');
+            
+            // Calculate pagination
+            const totalItems = issues.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const startIndex = (currentPage.manage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedIssues = issues.slice(startIndex, endIndex);
+            
+            // Update stats cards
+            const pending = issues.filter(i => i.status === 'รอดำเนินการ').length;
+            const inProgress = issues.filter(i => i.status === 'กำลังดำเนินการ').length;
+            const completed = issues.filter(i => i.status === 'เสร็จสิ้น').length;
+            
+            document.getElementById('manageTotal').textContent = totalItems;
+            document.getElementById('managePending').textContent = pending;
+            document.getElementById('manageProgress').textContent = inProgress;
+            document.getElementById('manageCompleted').textContent = completed;
+            
+            // Desktop table view
+            tbody.innerHTML = paginatedIssues.map((issue, index) => {
+                const date = new Date(issue.created_at);
+                const sla = calculateSLA(issue);
+
+            // กำหนดข้อความ SLA
+                const slaStatusText = sla.status ? sla.status : '-';
+                const slaClass = sla.status ? (sla.isOverdue ? 'sla-overdue' : 'sla-ontime') : 'sla-none';
+
+                return `
+                    <tr class="table-row">
+                        <td class="py-3 px-3 text-gray-300 text-sm">${date.toLocaleDateString('th-TH')}</td>
+                        <td class="py-3 px-3 text-gray-300 text-sm">${date.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</td>
+                        <td class="py-3 px-3 font-medium text-white text-sm">${issue.first_name} ${issue.last_name}</td>
+                        <td class="py-3 px-3 text-gray-300 text-sm">
+                            <div class="max-w-32 truncate" title="${issue.department}">${issue.department}</div>
+                        </td>
+                        <td class="py-3 px-3 text-gray-300 text-sm">
+                            <div class="max-w-40 truncate" title="${issue.problem_type}">${issue.problem_type}</div>
+                        </td>
+                        <td class="py-3 px-3">
+                            <div class="truncate text-gray-300 max-w-48 text-sm" title="${issue.problem_detail}">${issue.problem_detail}</div>
+                        </td>
+                        <td class="py-3 px-3">
+                            <span class="status-badge ${getStatusClass(issue.status)}">
+                                ${issue.status}
+                            </span>
+                        </td>
+                        <td class="py-3 px-3">
+                            <span class="status-badge ${slaClass}">
+                            ${slaStatusText}
+                            </span>
+                        </td>
+                        <td class="py-3 px-3 text-gray-300 text-sm">
+                            <div class="max-w-24 truncate" title="${issue.assignee || '-'}">${issue.assignee || '-'}</div>
+                        </td>
+                        <td class="py-3 px-3">
+                            <div class="flex flex-col space-y-2">
+                                <button onclick="openEditModal(${issue.id})" class="btn-primary px-3 py-2 rounded-lg text-white font-medium transition-all hover:scale-105 flex items-center justify-center text-xs">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                    </svg>
+                                    แก้ไข
+                                </button>
+                                <button onclick="deleteIssue(${issue.id})" class="btn-danger px-3 py-2 rounded-lg text-white font-medium transition-all hover:scale-105 flex items-center justify-center text-xs">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                                    </svg>
+                                    ลบ
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            // Mobile/Tablet card view
+            cardsContainer.innerHTML = paginatedIssues.map((issue, index) => {
+                const date = new Date(issue.created_at);
+                const sla = calculateSLA(issue);
+
+            // กำหนดข้อความ SLA
+                const slaStatusText = sla.status ? sla.status : '-';
+                const slaClass = sla.status ? (sla.isOverdue ? 'sla-overdue' : 'sla-ontime') : 'sla-none';
+
+                
+                return `
+                    <div class="glass-morphism rounded-xl sm:rounded-2xl p-4 sm:p-6 hover-lift border border-white/10 relative overflow-hidden group">
+                        <!-- Card Header -->
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 space-y-3 sm:space-y-0">
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-3 mb-3">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg neon-glow">
+                                        <span class="text-sm font-bold text-white">#${startIndex + index + 1}</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-lg">${issue.first_name} ${issue.last_name}</h4>
+                                        <p class="text-sm text-gray-400 flex items-center mt-1">
+                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                            </svg>
+                                            ${issue.department}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="glass-morphism rounded-lg p-3 border border-white/10">
+                                <div class="text-sm font-medium text-white">${date.toLocaleDateString('th-TH')}</div>
+                                <div class="text-xs text-gray-400">${date.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</div>
+                            </div>
+                        </div>
+
+                        <!-- Problem Details -->
+                        <div class="mb-4 p-4 bg-gradient-to-r from-white/5 to-white/10 rounded-xl border border-white/10">
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <div class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide flex items-center">
+                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                        </svg>
+                                        ประเภทปัญหา
+                                    </div>
+                                    <div class="text-sm text-white font-medium leading-relaxed">${issue.problem_type}</div>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide flex items-center">
+                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                        </svg>
+                                        รายละเอียด
+                                    </div>
+                                    <div class="text-sm text-gray-300 leading-relaxed bg-white/5 rounded-lg p-3 border border-white/10">${issue.problem_detail}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status Section -->
+                        <div class="grid grid-cols-2 gap-4 mb-4">
+                            <div class="glass-morphism rounded-lg p-3 border border-white/10">
+                                <div class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide">สถานะ</div>
+                                <span class="status-badge ${getStatusClass(issue.status)}">
+                                    ${issue.status}
+                                </span>
+                            </div>
+                            <div class="glass-morphism rounded-lg p-3 border border-white/10">
+                                <div class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide">SLA</div>
+                                <span class="status-badge ${slaClass}">
+                                    ${slaStatusText}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Assignee -->
+                        <div class="mb-6 glass-morphism rounded-lg p-3 border border-white/10">
+                            <div class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide flex items-center">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                </svg>
+                                ผู้ดำเนินการ
+                            </div>
+                            <div class="text-sm text-white font-medium">${issue.assignee || 'ยังไม่ได้มอบหมาย'}</div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 pt-4 border-t border-white/20">
+                            <button onclick="openEditModal(${issue.id})" class="btn-primary flex-1 py-3 rounded-xl text-sm font-medium transition-all hover:scale-105 flex items-center justify-center shadow-lg">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                                </svg>
+                                แก้ไขข้อมูล
+                            </button>
+                            <button onclick="deleteIssue(${issue.id})" class="btn-danger flex-1 py-3 rounded-xl text-sm font-medium transition-all hover:scale-105 flex items-center justify-center shadow-lg">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                                </svg>
+                                ลบรายการ
+                            </button>
+                        </div>
+
+                        <!-- Hover Effect Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Update pagination info
+            const showingStart = totalItems === 0 ? 0 : startIndex + 1;
+            const showingEnd = Math.min(endIndex, totalItems);
+            document.getElementById('managePageInfo').textContent = `แสดง ${showingStart}-${showingEnd} จาก ${totalItems} รายการ`;
+            
+            // Create pagination buttons
+            createPaginationButtons('managePaginationButtons', totalPages, currentPage.manage, 'changeManagePage');
+        }
+
+        // Create pagination buttons
+        function createPaginationButtons(containerId, totalPages, currentPageNum, changePageFunction) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            let buttonsHTML = '';
+            
+            // Previous button
+            buttonsHTML += `
+                <button onclick="${changePageFunction}(${currentPageNum - 1})" 
+                        class="flex items-center justify-center w-10 h-10 rounded-xl text-sm font-medium transition-all duration-300 ${currentPageNum === 1 ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 hover:scale-110 shadow-lg'}" 
+                        ${currentPageNum === 1 ? 'disabled' : ''}>
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
+                    </svg>
+                </button>
+            `;
+            
+            // Page numbers
+            const maxVisiblePages = window.innerWidth < 640 ? 3 : 5; // Responsive page count
+            let startPage = Math.max(1, currentPageNum - Math.floor(maxVisiblePages / 2));
+            let endPage = Math.min(totalPages, startPage + maxVisiblePages - 1);
+            
+            if (endPage - startPage + 1 < maxVisiblePages) {
+                startPage = Math.max(1, endPage - maxVisiblePages + 1);
+            }
+            
+            // First page and ellipsis
+            if (startPage > 1) {
+                buttonsHTML += `
+                    <button onclick="${changePageFunction}(1)" 
+                            class="flex items-center justify-center w-10 h-10 rounded-xl text-sm font-medium bg-white/10 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-110 border border-white/20">
+                        1
+                    </button>
+                `;
+                if (startPage > 2) {
+                    buttonsHTML += `<span class="flex items-center px-2 text-gray-400 text-sm">•••</span>`;
+                }
+            }
+            
+            // Page numbers
+            for (let i = startPage; i <= endPage; i++) {
+                if (i === currentPageNum) {
+                    buttonsHTML += `
+                        <button onclick="${changePageFunction}(${i})" 
+                                class="flex items-center justify-center w-10 h-10 rounded-xl text-sm font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg scale-110 border-2 border-blue-400/50 neon-glow">
+                            ${i}
+                        </button>
+                    `;
+                } else {
+                    buttonsHTML += `
+                        <button onclick="${changePageFunction}(${i})" 
+                                class="flex items-center justify-center w-10 h-10 rounded-xl text-sm font-medium bg-white/10 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-110 border border-white/20">
+                            ${i}
+                        </button>
+                    `;
+                }
+            }
+            
+            // Last page and ellipsis
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    buttonsHTML += `<span class="flex items-center px-2 text-gray-400 text-sm">•••</span>`;
+                }
+                buttonsHTML += `
+                    <button onclick="${changePageFunction}(${totalPages})" 
+                            class="flex items-center justify-center w-10 h-10 rounded-xl text-sm font-medium bg-white/10 text-white hover:bg-gradient-to-r hover:from-blue-600 hover:to-blue-700 transition-all duration-300 hover:scale-110 border border-white/20">
+                        ${totalPages}
+                    </button>
+                `;
+            }
+            
+            // Next button
+            buttonsHTML += `
+                <button onclick="${changePageFunction}(${currentPageNum + 1})" 
+                        class="flex items-center justify-center w-10 h-10 rounded-xl text-sm font-medium transition-all duration-300 ${currentPageNum === totalPages ? 'bg-gray-600/50 text-gray-400 cursor-not-allowed' : 'bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800 hover:scale-110 shadow-lg'}" 
+                        ${currentPageNum === totalPages ? 'disabled' : ''}>
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"/>
+                    </svg>
+                </button>
+            `;
+            
+            container.innerHTML = buttonsHTML;
+        }
+        
+        // Change manage page
+        function changeManagePage(page) {
+            if (page < 1 || page > Math.ceil(issues.length / itemsPerPage)) return;
+            currentPage.manage = page;
+            loadManageIssues();
+        }
+        
+        // Change reports page
+        function changeReportsPage(page) {
+            if (page < 1 || page > Math.ceil(issues.length / itemsPerPage)) return;
+            currentPage.reports = page;
+            loadReports();
+        }
+
+        // Load reports
+        function loadReports() {
+            if (!currentUser.isAdmin) return;
+            
+            const tbody = document.getElementById('reportsTableBody');
+            const cardsContainer = document.getElementById('reportsCards');
+            
+            // Calculate pagination
+            const totalItems = issues.length;
+            const totalPages = Math.ceil(totalItems / itemsPerPage);
+            const startIndex = (currentPage.reports - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const paginatedIssues = issues.slice(startIndex, endIndex);
+            
+            // Update total count
+            document.getElementById('reportsTotal').textContent = totalItems;
+            
+            // Desktop table view
+            tbody.innerHTML = paginatedIssues.map(issue => {
+                const date = new Date(issue.created_at);
+                const sla = calculateSLA(issue);
+
+            // กำหนดข้อความ SLA
+                const slaStatusText = sla.status ? sla.status : '-';
+                const slaClass = sla.status ? (sla.isOverdue ? 'sla-overdue' : 'sla-ontime') : 'sla-none';
+                
+                return `
+                    <tr class="table-row">
+                        <td class="py-4 px-4 text-gray-300 text-sm">${date.toLocaleDateString('th-TH')}</td>
+                        <td class="py-4 px-4 text-gray-300 text-sm">${date.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</td>
+                        <td class="py-4 px-4 font-medium text-white text-sm">${issue.first_name} ${issue.last_name}</td>
+                        <td class="py-4 px-4 text-gray-300 text-sm">${issue.department}</td>
+                        <td class="py-4 px-4 text-gray-300 text-sm">${issue.problem_type}</td>
+                        <td class="py-4 px-4">
+                            <span class="status-badge ${getStatusClass(issue.status)}">
+                                ${issue.status}
+                            </span>
+                        </td>
+                        <td class="py-4 px-4">
+                            <span class="status-badge ${slaClass}">
+                            ${slaStatusText}
+                            </span>
+                        </td>
+                        <td class="py-4 px-4 text-gray-300 text-sm">${issue.assignee || '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+            
+            // Mobile/Tablet card view
+            cardsContainer.innerHTML = paginatedIssues.map((issue, index) => {
+                const date = new Date(issue.created_at);
+                const sla = calculateSLA(issue);
+
+            // กำหนดข้อความ SLA
+                const slaStatusText = sla.status ? sla.status : '-';
+                const slaClass = sla.status ? (sla.isOverdue ? 'sla-overdue' : 'sla-ontime') : 'sla-none';
+                
+                return `
+                    <div class="glass-morphism rounded-xl sm:rounded-2xl p-4 sm:p-6 hover-lift border border-white/10 relative overflow-hidden group">
+                        <!-- Card Header -->
+                        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-4 space-y-3 sm:space-y-0">
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-3 mb-3">
+                                    <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center shadow-lg neon-glow">
+                                        <span class="text-sm font-bold text-white">#${startIndex + index + 1}</span>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-white text-lg">${issue.first_name} ${issue.last_name}</h4>
+                                        <p class="text-sm text-gray-400 flex items-center mt-1">
+                                            <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                            </svg>
+                                            ${issue.department}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="glass-morphism rounded-lg p-3 border border-white/10">
+                                <div class="text-sm font-medium text-white">${date.toLocaleDateString('th-TH')}</div>
+                                <div class="text-xs text-gray-400">${date.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })}</div>
+                            </div>
+                        </div>
+
+                        <!-- Problem Details -->
+                        <div class="mb-4 p-4 bg-gradient-to-r from-white/5 to-white/10 rounded-xl border border-white/10">
+                            <div class="grid grid-cols-1 gap-4">
+                                <div>
+                                    <div class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide flex items-center">
+                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                                        </svg>
+                                        ประเภทปัญหา
+                                    </div>
+                                    <div class="text-sm text-white font-medium leading-relaxed">${issue.problem_type}</div>
+                                </div>
+                                <div>
+                                    <div class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide flex items-center">
+                                        <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                            <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
+                                        </svg>
+                                        รายละเอียด
+                                    </div>
+                                    <div class="text-sm text-gray-300 leading-relaxed bg-white/5 rounded-lg p-3 border border-white/10">${issue.problem_detail}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Status & Performance Section -->
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+                            <div class="glass-morphism rounded-lg p-3 border border-white/10">
+                                <div class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide">สถานะ</div>
+                                <span class="status-badge ${getStatusClass(issue.status)}">
+                                    ${issue.status}
+                                </span>
+                            </div>
+                            <div class="glass-morphism rounded-lg p-3 border border-white/10">
+                                <div class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide">SLA</div>
+                                <span class="status-badge ${slaClass}">
+                                ${slaStatusText}
+                            </span>
+                            </div>
+                            <div class="glass-morphism rounded-lg p-3 border border-white/10">
+                                <div class="text-xs text-gray-400 mb-2 font-medium uppercase tracking-wide flex items-center">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+                                    </svg>
+                                    ผู้ดำเนินการ
+                                </div>
+                                <div class="text-sm text-white font-medium">${issue.assignee || 'ยังไม่ได้มอบหมาย'}</div>
+                            </div>
+                        </div>
+
+                        <!-- Report Summary -->
+                        <div class="pt-4 border-t border-white/20">
+                            <div class="flex items-center justify-between text-xs text-gray-400">
+                                <div class="flex items-center space-x-2">
+                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                    </svg>
+                                    <span>รายงานหมายเลข ${startIndex + index + 1}</span>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <div class="w-2 h-2 ${sla.isOverdue ? 'bg-red-400' : 'bg-green-400'} rounded-full"></div>
+                                    <span>${sla.isOverdue ? 'เกินเวลา' : 'ตรงเวลา'}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Hover Effect Overlay -->
+                        <div class="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-red-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-xl pointer-events-none"></div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Update pagination info
+            const showingStart = totalItems === 0 ? 0 : startIndex + 1;
+            const showingEnd = Math.min(endIndex, totalItems);
+            document.getElementById('reportsPageInfo').textContent = `แสดง ${showingStart}-${showingEnd} จาก ${totalItems} รายการ`;
+            
+            // Create pagination buttons
+            createPaginationButtons('reportsPaginationButtons', totalPages, currentPage.reports, 'changeReportsPage');
+        }
+
+        // Open edit modal
+        function openEditModal(issueId) {
+            const issue = issues.find(i => i.id === issueId);
+            if (!issue) return;
+            
+            document.getElementById('editIssueId').value = issueId;
+            document.getElementById('editStatus').value = issue.status;
+            document.getElementById('editAssignee').value = issue.assignee || '';
+            
+            document.getElementById('editFirstName').value = issue.first_name;
+            document.getElementById('editLastName').value = issue.last_name;
+            document.getElementById('editDepartment').value = issue.department;
+            
+            document.getElementById('editModal').classList.remove('hidden');
+        }
+
+        // Close edit modal
+        function closeEditModal() {
+            document.getElementById('editModal').classList.add('hidden');
+            document.getElementById('editForm').reset();
+        }
+
+        // Handle edit submission
+        async function handleEditSubmit(e) {
+            e.preventDefault();
+            
+            const issueId = parseInt(document.getElementById('editIssueId').value);
+            const newStatus = document.getElementById('editStatus').value;
+            const newAssignee = document.getElementById('editAssignee').value.trim();
+            
+            console.log('🔄 Starting update process:', { issueId, newStatus, newAssignee });
+            
+            try {
+                // Find the issue in local array
+                const issueIndex = issues.findIndex(i => i.id === issueId);
+                if (issueIndex === -1) {
+                    console.error('❌ Issue not found in local array:', issueId);
+                    showPopup('error', 'เกิดข้อผิดพลาด! ⚠️', 'ไม่พบข้อมูลปัญหาที่ต้องการแก้ไข');
+                    return;
+                }
+                
+                console.log('📝 Found issue:', issues[issueIndex]);
+                
+                // Step 1: Update in Supabase FIRST (this is the main database)
+                let supabaseSuccess = false;
+                if (supabase) {
+                    try {
+                        console.log('🔄 Attempting Supabase update...');
+                        
+                        const updateData = { 
+                            status: newStatus,
+                            assignee: newAssignee || null
+                        };
+                        
+                        console.log('📤 Sending to Supabase:', updateData);
+                        
+                        const { data, error } = await supabase
+                            .from('it_issues')
+                            .update(updateData)
+                            .eq('id', issueId)
+                            .select();
+                        
+                        if (error) {
+                            console.error('❌ Supabase update error:', error);
+                            console.error('Error details:', error.message, error.details, error.hint);
+                            throw error;
+                        } else {
+                            console.log('✅ Supabase update successful:', data);
+                            supabaseSuccess = true;
+                            
+                            // Verify the update worked
+                            if (data && data.length > 0) {
+                                console.log('✅ Verified updated data:', data[0]);
+                            }
+                        }
+                    } catch (supabaseError) {
+                        console.error('❌ Supabase update failed:', supabaseError);
+                        showPopup('error', 'เกิดข้อผิดพลาด Supabase! ⚠️', `ไม่สามารถอัปเดตในฐานข้อมูลได้: ${supabaseError.message}`);
+                        return; // Don't continue if Supabase fails
+                    }
+                }
+                
+                // Step 2: Only update local data if Supabase succeeded
+                if (supabaseSuccess) {
+                    const oldStatus = issues[issueIndex].status;
+                    const oldAssignee = issues[issueIndex].assignee;
+                    
+                    issues[issueIndex].status = newStatus;
+                    issues[issueIndex].assignee = newAssignee || null;
+                    
+                    // If status changed to completed, record completion time
+                    if (newStatus === 'เสร็จสิ้น' && oldStatus !== 'เสร็จสิ้น') {
+                        issues[issueIndex].completed_at = new Date().toISOString();
+                    }
+                    
+
+                    
+                    console.log('✅ Updated local data:', {
+                        old: { status: oldStatus, assignee: oldAssignee },
+                        new: { status: newStatus, assignee: newAssignee }
+                    });
+                    
+                    // Save to localStorage as backup
+                    localStorage.setItem('itIssues', JSON.stringify(issues));
+                    console.log('💾 Saved to localStorage as backup');
+                }
+                
+                // Step 3: Reload data from Supabase to ensure sync
+                console.log('🔄 Reloading data from Supabase...');
+                await loadDataFromSupabase();
+                
+                // Close modal and refresh all views
+                closeEditModal();
+                
+                // Force refresh all views with new data
+                if (document.getElementById('managePage').classList.contains('hidden') === false) {
+                    loadManageIssues();
+                }
+                if (document.getElementById('dashboardPage').classList.contains('hidden') === false) {
+                    loadDashboard();
+                }
+                if (document.getElementById('reportsPage').classList.contains('hidden') === false) {
+                    loadReports();
+                }
+                
+                showPopup('success', 'อัปเดตสำเร็จ', `สถานะ : ${newStatus}${newAssignee ? ', ผู้ดำเนินการ: ' + newAssignee : ''}`);
+                
+            } catch (error) {
+                console.error('❌ Error in update process:', error);
+                showPopup('error', 'เกิดข้อผิดพลาด', 'ไม่สามารถอัปเดตข้อมูลได้: ' + error.message);
+            }
+        }
+
+        // Update issue status
+        async function updateStatus(issueId, newStatus) {
+            try {
+                // Try to update in Supabase first
+                const { data, error } = await supabase
+                    .from('it_issues')
+                    .update({ status: newStatus })
+                    .eq('id', issueId)
+                    .select();
+                    
+                if (error) {
+                    console.error('Supabase update error:', error);
+                    // Fallback to local storage
+                    const issueIndex = issues.findIndex(i => i.id === issueId);
+                    if (issueIndex !== -1) {
+                        issues[issueIndex].status = newStatus;
+                        localStorage.setItem('itIssues', JSON.stringify(issues));
+                    }
+                } else {
+                    console.log('✅ Status updated in Supabase');
+                    // Update local array
+                    const issueIndex = issues.findIndex(i => i.id === issueId);
+                    if (issueIndex !== -1) {
+                        issues[issueIndex].status = newStatus;
+                    }
+                }
+                
+                showPopup('success', 'อัปเดตสำเร็จ', 'สถานะได้รับการอัปเดตเรียบร้อยแล้ว');
+                loadDashboard();
+                
+            } catch (error) {
+                console.error('Error updating status:', error);
+                showPopup('error', 'เกิดข้อผิดพลาด', 'ไม่สามารถอัปเดตสถานะได้');
+            }
+        }
+
+        // Update assignee
+        async function updateAssignee(issueId, assignee) {
+            try {
+                // Try to update in Supabase first
+                const { data, error } = await supabase
+                    .from('it_issues')
+                    .update({ assignee: assignee })
+                    .eq('id', issueId);
+                
+                if (error) {
+                    console.error('Supabase assignee update error:', error);
+                    // Fallback to local storage
+                    const issueIndex = issues.findIndex(i => i.id === issueId);
+                    if (issueIndex !== -1) {
+                        issues[issueIndex].assignee = assignee;
+                        localStorage.setItem('itIssues', JSON.stringify(issues));
+                    }
+                } else {
+                    console.log('✅ Assignee updated in Supabase');
+                    // Update local array
+                    const issueIndex = issues.findIndex(i => i.id === issueId);
+                    if (issueIndex !== -1) {
+                        issues[issueIndex].assignee = assignee;
+                    }
+                }
+                
+            } catch (error) {
+                console.error('Error updating assignee:', error);
+            }
+        }
+
+        // Delete issue
+        async function deleteIssue(issueId) {
+            if (confirm('คุณต้องการลบปัญหานี้หรือไม่?')) {
+                try {
+                    // Try to delete from Supabase first
+                    const { error } = await supabase
+                        .from('it_issues')
+                        .delete()
+                        .eq('id', issueId);
+                    
+                    if (error) {
+                        console.error('Supabase delete error:', error);
+                        // Fallback to local storage
+                        issues = issues.filter(i => i.id !== issueId);
+                        localStorage.setItem('itIssues', JSON.stringify(issues));
+                    } else {
+                        console.log('✅ Issue deleted from Supabase');
+                        // Remove from local array
+                        issues = issues.filter(i => i.id !== issueId);
+                    }
+                    
+                    loadManageIssues();
+                    loadDashboard();
+                    showPopup('success', 'ลบสำเร็จ', 'ปัญหาได้รับการลบเรียบร้อยแล้ว');
+                    
+                } catch (error) {
+                    console.error('Error deleting issue:', error);
+                    showPopup('error', 'เกิดข้อผิดพลาด', 'ไม่สามารถลบปัญหาได้');
+                }
+            }
+        }
+
+        // Export to Excel
+        function exportToExcel() {
+            const data = issues.map(issue => {
+                const date = new Date(issue.created_at);
+                const sla = calculateSLA(issue.problem_detail, issue.created_at, issue.status, issue.completed_at);
+                
+                return {
+                    'วันที่': date.toLocaleDateString('th-TH'),
+                    'เวลาที่แจ้ง': date.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }),
+                    'ชื่อ นามสกุล': `${issue.first_name} ${issue.last_name}`,
+                    'หน่วยงาน': issue.department,
+                    'ประเภทปัญหา': issue.problem_type,
+                    'รายละเอียดปัญหา': issue.problem_detail,
+                    'สถานะการดำเนินการ': issue.status,
+                    'สถานะ SLA': sla.status,
+                    'ผู้ดำเนินการ': issue.assignee || '-'
+                };
+            });
+            
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'รายงานปัญหา IT');
+            
+            const fileName = `รายงานปัญหา_IT_${new Date().toLocaleDateString('th-TH')}.xlsx`;
+            XLSX.writeFile(wb, fileName);
+            
+            showPopup('success', 'ส่งออกสำเร็จ', 'ไฟล์ Excel ได้รับการดาวน์โหลดเรียบร้อยแล้ว');
+        }
+
+        // Get status class
+        function getStatusClass(status) {
+            switch (status) {
+                case 'รอดำเนินการ':
+                    return 'status-pending';
+                case 'กำลังดำเนินการ':
+                    return 'status-progress';
+                case 'เสร็จสิ้น':
+                    return 'status-completed';
+                default:
+                    return 'status-pending';
+            }
+        }
+
+        // Show popup
+        function showPopup(type, title, message) {
+            const popup = document.getElementById('popup');
+            const icon = document.getElementById('popupIcon');
+            const titleEl = document.getElementById('popupTitle');
+            const messageEl = document.getElementById('popupMessage');
+            
+            if (type === 'success') {
+                icon.className = 'w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center neon-green';
+                icon.innerHTML = '<svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg>';
+                titleEl.className = 'text-2xl font-bold mb-4 text-green-400';
+            } else {
+                icon.className = 'w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-red-500 to-red-600 rounded-full flex items-center justify-center neon-red';
+                icon.innerHTML = '<svg class="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>';
+                titleEl.className = 'text-2xl font-bold mb-4 text-red-400';
+            }
+            
+            titleEl.textContent = title;
+            messageEl.textContent = message;
+            popup.classList.remove('hidden');
+        }
+
+        // Close popup
+        function closePopup() {
+            document.getElementById('popup').classList.add('hidden');
+        }
+
+        // Logout
+        function logout() {
+            currentUser = null;
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('loginForm').reset();
+            
+            // Reset navigation
+            document.querySelectorAll('.nav-item').forEach(btn => {
+                btn.classList.remove('active');
+            });
+        }
+
+ // ✅ ฟังก์ชันส่ง MOPH Notify
+ async function sendLineNotify(message) {
+          const url = "https://morpromt2f.moph.go.th/api/notify/send";
+          const payload = {
+            messages: [
+              { type: "text", text: message }
+            ]
+          };
+
+          try {
+            const response = await fetch(url, {
+              method: "POST",
+              headers: {
+                "content-type": "application/json",
+                "client-key": "5494493242fd5ff380af3b51f7aa7a47fc075171",   // 🔑 client-key ของคุณ
+                "secret-key": "4NXFT5AVL6UF3YRDVEFIIV2GKKCQ"    // 🔑 secret-key ของคุณ
+              },
+              body: JSON.stringify(payload)
+            });
+
+            console.log("✅ MOPH Notify Sent:", await response.text());
+          } catch (err) {
+            console.error("❌ MOPH Notify Error:", err);
+          }
+        }
+
+// ✅ ฟังก์ชันดึงวันที่และเวลา
+function getCurrentDateTime() {
+    const now = new Date();
+    const date = now.toLocaleDateString('th-TH'); // เช่น 25/08/2566
+    const time = now.toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }); // เช่น 14:30
+    return `${date} ${time}`;
+}
+
+// ✅ เพิ่มการแจ้ง LINE เมื่อส่งฟอร์มแจ้งปัญหา
+document.getElementById('problemForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+
+    const firstName = document.getElementById('firstName').value;
+    const lastName = document.getElementById('lastName').value;
+    const department = document.getElementById('department').value;
+    const problemType = document.getElementById('problemType').value;
+    const problemDetail = document.getElementById('problemDetail').value;
+
+    const dateTime = getCurrentDateTime();
+
+    // ✅ ดึงปัญหาล่าสุดจาก Supabase
+const { data, error } = await supabase
+  .from("it_issues")                  // 👈 เปลี่ยนชื่อตารางให้ตรงกับของคุณ
+  .select("id")
+  .order("created_at", { ascending: false })
+  .limit(1);
+
+if (error) {
+  console.error("❌ Supabase Error:", error);
+}
+
+let issueId = "ไม่พบรหัส";
+if (data && data.length > 0) {
+  issueId = data[0].id;
+}
+
+    const message = `📢 รายการแจ้งปัญหาใหม่วันนี้\n\n` +
+                    `📌 รหัสปัญหา : ${issueId}\n` +   // ✅ เพิ่มตรงนี้
+                    `1) วันที่/เวลา : ${dateTime}\n` +
+                    `2) ผู้แจ้ง : ${firstName} ${lastName}\n` +
+                    `3) หน่วยงาน : ${department}\n` +
+                    `4) ประเภท : ${problemType}\n` +
+                    `5) รายละเอียด : ${problemDetail}\n` +
+                    `6) สถานะ : รอดำเนินการ `;
+
+    await sendLineNotify(message);
+
+});
+
+// ✅ เพิ่มการแจ้ง LINE เมื่อแก้ไขสถานะ
+document.getElementById('editForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const issueId = document.getElementById('editIssueId').value; // สมมติว่ามี hidden input เก็บ id
+    const newStatus = document.getElementById('editStatus').value;
+    const assignee = document.getElementById('editAssignee').value;
+    const firstName = document.getElementById('editFirstName').value;
+    const lastName = document.getElementById('editLastName').value;
+    const department = document.getElementById('editDepartment').value;
+
+    const dateTime = getCurrentDateTime();
+
+    const message = `🔔 อัปเดตสถานะปัญหา\n\n` +
+                    `📌 รหัสปัญหา : ${issueId}\n` +   // ✅ เพิ่มตรงนี้
+                    `1) วันที่/เวลา : ${dateTime}\n` +
+                    `2) ผู้แจ้ง : ${firstName} ${lastName}\n` +
+                    `3) หน่วยงาน : ${department}\n` +
+                    `4) ผู้ดำเนินการ : ${assignee || "ยังไม่ระบุ"}\n` +
+                    `5) สถานะใหม่ : ${newStatus} ✅`;
+
+    await sendLineNotify(message);
+
+    closeEditModal();
+});
+
+function parseThaiDate(dateStr) {
+  // รับ "27/8/2568" หรือ "27/08/2568"
+  const parts = dateStr.trim().split('/');
+  if (parts.length !== 3) return null;
+
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const yearBE = parseInt(parts[2], 10);
+  const yearAD = yearBE - 543; // แปลง พ.ศ. → ค.ศ.
+
+  return new Date(yearAD, month, day);
+}
+
+function parseInputDate(inputValue) {
+  // inputValue เช่น "2025-08-27"
+  if (!inputValue) return null;
+  const parts = inputValue.split('/');
+  if (parts.length !== 3) return null;
+
+  const year = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const day = parseInt(parts[2], 10);
+  return new Date(year, month, day);
+}
+
+function filterNotifyReports() {
+  const startDateVal = document.getElementById("startDate").value;
+  const endDateVal   = document.getElementById("endDate").value;
+  const startDate = parseInputDate(startDateVal);
+  const endDate   = parseInputDate(endDateVal);
+
+  const deptFilter   = document.getElementById("deptFilter").value.toLowerCase();
+  const typeFilter   = document.getElementById("typeFilter").value.toLowerCase();
+  const statusFilter = document.getElementById("statusFilter").value.toLowerCase();
+  const slaFilter    = document.getElementById("slaFilter").value.toLowerCase();
+
+  const tbody = document.getElementById("reportsTableBody");
+  const rows = tbody.getElementsByTagName("tr");
+
+  for (let i = 0; i < rows.length; i++) {
+    const cells = rows[i].getElementsByTagName("td");
+    if (cells.length < 8) continue;
+
+    const dateText = cells[0].innerText.trim(); // เช่น 27/8/2568
+    const dept   = cells[3].innerText.toLowerCase();
+    const type   = cells[4].innerText.toLowerCase();
+    const status = cells[5].innerText.toLowerCase();
+    const sla    = cells[6].innerText.toLowerCase();
+
+    let match = true;
+
+    const rowDate = parseThaiDate(dateText);
+    if (!rowDate) {
+      rows[i].style.display = "";
+      continue;
+    }
+
+    if (startDate && rowDate < startDate) match = false;
+    if (endDate && rowDate > endDate) match = false;
+    if (deptFilter && !dept.includes(deptFilter)) match = false;
+    if (typeFilter && !type.includes(typeFilter)) match = false;
+    if (statusFilter && !status.includes(statusFilter)) match = false;
+    if (slaFilter && !sla.includes(slaFilter)) match = false;
+
+    rows[i].style.display = match ? "" : "none";
+  }
+}
+
+
+
+function clearFilters() {
+  document.getElementById("startDate").value = "";
+  document.getElementById("endDate").value = "";
+  document.getElementById("deptFilter").value = "";
+  document.getElementById("typeFilter").value = "";
+  document.getElementById("statusFilter").value = "";
+  document.getElementById("slaFilter").value = "";
+
+  const rows = document.getElementById("reportsTableBody").getElementsByTagName("tr");
+  for (let i = 0; i < rows.length; i++) {
+    rows[i].style.display = "";
+  }
+}
+
+function exportFilteredToExcel() {
+  const table = document.getElementById("reportsTable");
+  const wb = XLSX.utils.book_new();
+
+  let exportData = [];
+  const rows = table.getElementsByTagName("tr");
+
+  for (let i = 0; i < rows.length; i++) {
+    if (rows[i].style.display === "none") continue;
+    let row = [];
+    const cells = rows[i].getElementsByTagName(i === 0 ? "th" : "td");
+    for (let j = 0; j < cells.length; j++) {
+      row.push(cells[j].innerText);
+    }
+    exportData.push(row);
+  }
+
+  const ws = XLSX.utils.aoa_to_sheet(exportData);
+  XLSX.utils.book_append_sheet(wb, ws, "Filtered Reports");
+  XLSX.writeFile(wb, "NotifyReports.xlsx");
+}
+    </script>
+<script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'974809a997534f5d',t:'MTc1NjA5MjkwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
