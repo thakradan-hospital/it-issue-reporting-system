@@ -441,8 +441,14 @@
 
     <!-- Main Application -->
     <div id="mainApp" class="hidden flex h-screen relative z-10">
-        <!-- Sidebar -->
-        <div class="w-64 sidebar-gradient border-r border-white/10 p-5 flex flex-col">
+        <!-- Sidebar Toggle for Mobile -->
+    <button id="menuToggle" class="md:hidden fixed top-4 left-4 z-50 bg-blue-600 p-2 rounded-lg">
+  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+    <path d="M3 6h18M3 12h18M3 18h18"/>
+  </svg>
+</button>
+        <!-- Sidebar Desktop -->
+        <div class="w-64 hidden md:flex sidebar-gradient border-r border-white/10 p-5 flex-col">
             <div class="flex items-center mb-8">
                 <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 neon-glow">
                     <svg class="w-5 h-5" fill="white" viewBox="0 0 24 24">
@@ -514,6 +520,89 @@
                 </button>
             </div>
         </div>
+        <!-- Sidebar Overlay Mobile -->
+<div id="mobileSidebar" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden">
+    <div class="relative w-64 h-full sidebar-gradient p-5 flex flex-col">
+        
+        <!-- ปุ่มปิด (X) -->
+        <button id="closeSidebarBtn" class="absolute top-4 right-4 text-white hover:text-red-400">
+            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+        </button>
+
+        <div class="flex items-center mb-8 mt-8"> <!-- mt-8 กันไม่ให้ X ทับโลโก้ -->
+            <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 neon-glow">
+                <svg class="w-5 h-5" fill="white" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+            </div>
+            <div>
+                <h2 class="text-lg font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">IT Issue Reporting</h2>
+                <p class="text-xs text-gray-400">ระบบแจ้งปัญหาด้านเทคโนโลยีสารสนเทศ</p>
+            </div>
+        </div>
+        
+        <nav class="space-y-2 flex-1">
+            <button onclick="showPage('dashboard')" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
+                <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="font-semibold text-sm">หน้าหลัก</div>
+                    <div class="text-xs text-gray-400">Dashboard</div>
+                </div>
+            </button>
+            
+            <button onclick="showPage('report')" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
+                <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="font-semibold text-sm">แจ้งปัญหา</div>
+                    <div class="text-xs text-gray-400">Report Issue</div>
+                </div>
+            </button>
+            
+            <button onclick="showPage('manage')" id="manageBtn" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group hidden">
+                <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="font-semibold text-sm">จัดการปัญหา</div>
+                    <div class="text-xs text-gray-400">Manage Issues</div>
+                </div>
+            </button>
+            
+            <button onclick="showPage('reports')" id="reportsBtn" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group hidden">
+                <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="font-semibold text-sm">รายงาน</div>
+                    <div class="text-xs text-gray-400">Reports</div>
+                </div>
+            </button>
+        </nav>
+        
+        <div class="mt-4">
+            <button onclick="logout()" class="w-full px-4 py-3 btn-danger rounded-lg transition-all flex items-center justify-center group hover-lift">
+                <svg class="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.59L17 17l5-5z"/>
+                </svg>
+                <span class="font-semibold text-sm">ออกจากระบบ</span>
+            </button>
+        </div>
+    </div>
+</div>
 
         <!-- Main Content -->
         <div class="flex-1 overflow-auto bg-gradient-to-br from-slate-900/50 to-slate-800/30">
@@ -3166,6 +3255,36 @@ function exportFilteredToExcel() {
   XLSX.utils.book_append_sheet(wb, ws, "Filtered Reports");
   XLSX.writeFile(wb, "NotifyReports.xlsx");
 }
+
+const menuToggle = document.getElementById('menuToggle');
+  const mobileSidebar = document.getElementById('mobileSidebar');
+  const mobileSidebarContent = document.querySelector('#mobileSidebar > div');
+  const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+
+  function openSidebar() {
+    mobileSidebar.classList.remove('hidden');
+    setTimeout(() => {
+      mobileSidebarContent.classList.remove('-translate-x-full');
+    }, 10);
+  }
+
+  function closeSidebar() {
+    mobileSidebarContent.classList.add('-translate-x-full');
+    setTimeout(() => {
+      mobileSidebar.classList.add('hidden');
+    }, 300);
+  }
+
+  menuToggle.addEventListener('click', openSidebar);
+  closeSidebarBtn.addEventListener('click', closeSidebar);
+
+  // ปิดเมื่อกด overlay
+  mobileSidebar.addEventListener('click', (e) => {
+    if (e.target === mobileSidebar) {
+      closeSidebar();
+    }
+  });
+  
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'974809a997534f5d',t:'MTc1NjA5MjkwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
