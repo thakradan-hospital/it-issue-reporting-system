@@ -441,11 +441,20 @@
 
     <!-- Main Application -->
     <div id="mainApp" class="hidden flex h-screen relative z-10">
-        <!-- Sidebar Toggle for Mobile -->
-    <button id="menuToggle" class="md:hidden fixed top-4 left-4 z-50 bg-blue-600 p-2 rounded-lg">
-  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-    <path d="M3 6h18M3 12h18M3 18h18"/>
+        <!-- ปุ่ม Toggle Sidebar -->
+<button id="menuToggle"
+  class="flex items-center gap-2 px-4 py-2 rounded-xl
+         bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold
+         shadow-md hover:shadow-lg hover:scale-105 active:scale-95
+         transition-all duration-300 md:hidden">
+
+  <!-- ไอคอน Hamburger -->
+  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
   </svg>
+
+  <!-- ข้อความ -->
+  <span>เมนู</span>
 </button>
         <!-- Sidebar Desktop -->
         <div class="w-64 hidden md:flex sidebar-gradient border-r border-white/10 p-5 flex-col">
@@ -525,15 +534,6 @@
   <div id="mobileSidebarContent"
        class="relative w-72 h-full sidebar-gradient p-5 flex flex-col shadow-2xl 
               transform -translate-x-full transition-transform duration-300">
-
-    <!-- Header -->
-    <div class="flex items-center justify-between mb-6">
-      <h2 class="text-lg font-bold text-white flex items-center">
-        <svg class="w-5 h-5 mr-2 text-blue-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-        </svg>
-        เมนูนำทาง
-      </h2>
 
       <!-- ปุ่มปิด -->
       <button id="closeSidebarBtn"
