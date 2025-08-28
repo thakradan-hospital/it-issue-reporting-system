@@ -441,12 +441,22 @@
 
     <!-- Main Application -->
     <div id="mainApp" class="hidden flex h-screen relative z-10">
-        <!-- Sidebar Toggle for Mobile -->
-    <button id="menuToggle" class="md:hidden fixed top-4 left-4 z-50 bg-blue-600 p-2 rounded-lg">
-  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-    <path d="M3 6h18M3 12h18M3 18h18"/>
+        <!-- ปุ่ม Toggle Sidebar (Mobile Only) -->
+<button id="menuToggle"
+  class="flex items-center gap-2 px-4 py-2 rounded-xl
+         bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold
+         shadow-md hover:shadow-lg hover:scale-105 active:scale-95
+         transition-all duration-300 md:hidden">
+
+  <!-- ไอคอน Hamburger -->
+  <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
   </svg>
+
+  <!-- ข้อความ -->
+  <span>เมนู</span>
 </button>
+
         <!-- Sidebar Desktop -->
         <div class="w-64 hidden md:flex sidebar-gradient border-r border-white/10 p-5 flex-col">
             <div class="flex items-center mb-8">
@@ -521,10 +531,13 @@
             </div>
         </div>
         <!-- Sidebar Overlay Mobile -->
-<div id="mobileSidebar" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden md:hidden">
+<div id="mobileSidebar" 
+     class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden md:hidden 
+            transition-opacity duration-300">
   <div id="mobileSidebarContent"
        class="relative w-72 h-full sidebar-gradient p-5 flex flex-col shadow-2xl 
               transform -translate-x-full transition-transform duration-300">
+
 
       <!-- ปุ่มปิด -->
       <button id="closeSidebarBtn"
@@ -3264,33 +3277,43 @@ function exportFilteredToExcel() {
 }
 
 const menuToggle = document.getElementById('menuToggle');
-  const mobileSidebar = document.getElementById('mobileSidebar');
-  const mobileSidebarContent = document.querySelector('#mobileSidebar > div');
-  const closeSidebarBtn = document.getElementById('closeSidebarBtn');
+const mobileSidebar = document.getElementById('mobileSidebar');
+const mobileSidebarContent = document.getElementById('mobileSidebarContent');
+const closeSidebarBtn = document.getElementById('closeSidebarBtn');
 
-  function openSidebar() {
-    mobileSidebar.classList.remove('hidden');
-    setTimeout(() => {
-      mobileSidebarContent.classList.remove('-translate-x-full');
-    }, 10);
+function openSidebar() {
+  // แสดง overlay
+  mobileSidebar.classList.remove('hidden');
+  mobileSidebar.classList.add('opacity-0');
+  
+  setTimeout(() => {
+    mobileSidebar.classList.remove('opacity-0'); // fade in overlay
+    mobileSidebarContent.classList.remove('-translate-x-full'); // slide in sidebar
+  }, 10);
+}
+
+function closeSidebar() {
+  mobileSidebarContent.classList.add('-translate-x-full'); // slide out sidebar
+  mobileSidebar.classList.add('opacity-0'); // fade out overlay
+  
+  setTimeout(() => {
+    mobileSidebar.classList.add('hidden');
+  }, 300); // ต้องตรงกับ transition duration
+}
+
+// กดปุ่มเปิดเมนู
+menuToggle.addEventListener('click', openSidebar);
+
+// กดปุ่มปิด (X)
+closeSidebarBtn.addEventListener('click', closeSidebar);
+
+// กด overlay (นอก Sidebar) → ปิด
+mobileSidebar.addEventListener('click', (e) => {
+  if (e.target === mobileSidebar) {
+    closeSidebar();
   }
+});
 
-  function closeSidebar() {
-    mobileSidebarContent.classList.add('-translate-x-full');
-    setTimeout(() => {
-      mobileSidebar.classList.add('hidden');
-    }, 300);
-  }
-
-  menuToggle.addEventListener('click', openSidebar);
-  closeSidebarBtn.addEventListener('click', closeSidebar);
-
-  // ปิดเมื่อกด overlay
-  mobileSidebar.addEventListener('click', (e) => {
-    if (e.target === mobileSidebar) {
-      closeSidebar();
-    }
-  });
 
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'974809a997534f5d',t:'MTc1NjA5MjkwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
