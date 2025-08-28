@@ -525,11 +525,16 @@
     <div class="relative w-64 h-full sidebar-gradient p-5 flex flex-col">
         
         <!-- ปุ่มปิด (X) -->
-        <button id="closeSidebarBtn" class="absolute top-4 right-4 text-white hover:text-red-400">
-            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M6 18L18 6M6 6l12 12"/>
-            </svg>
-        </button>
+<button id="closeSidebarBtn"
+    class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center 
+           rounded-full bg-white/10 text-white shadow-md
+           hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500
+           hover:shadow-lg hover:shadow-purple-500/30
+           transition-all duration-300">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+</button>
 
         <div class="flex items-center mb-8 mt-8"> <!-- mt-8 กันไม่ให้ X ทับโลโก้ -->
             <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 neon-glow">
@@ -3284,7 +3289,7 @@ const menuToggle = document.getElementById('menuToggle');
       closeSidebar();
     }
   });
-  
+
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'974809a997534f5d',t:'MTc1NjA5MjkwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
