@@ -526,17 +526,17 @@
        class="relative w-72 h-full sidebar-gradient p-5 flex flex-col shadow-2xl 
               transform -translate-x-full transition-transform duration-300">
 
-      <!-- ปุ่มปิด -->
-      <button id="closeSidebarBtn"
-        class="w-9 h-9 flex items-center justify-center rounded-full 
-               bg-white/10 text-white shadow-md hover:bg-gradient-to-r 
-               hover:from-blue-500 hover:to-purple-500 hover:shadow-purple-500/30
-               transition-all duration-300">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-        </svg>
-      </button>
-    </div>
+    <!-- ปุ่มปิด (X) -->
+    <button id="closeSidebarBtn"
+      class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center 
+             rounded-full bg-white/10 text-white shadow-md
+             hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500
+             hover:shadow-lg hover:shadow-purple-500/30
+             transition-all duration-300">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+      </svg>
+    </button>
 
         <div class="flex items-center mb-8 mt-8"> <!-- mt-8 กันไม่ให้ X ทับโลโก้ -->
             <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 neon-glow">
@@ -549,7 +549,7 @@
                 <p class="text-xs text-gray-400">ระบบแจ้งปัญหาด้านเทคโนโลยีสารสนเทศ</p>
             </div>
         </div>
-
+        
         <nav class="space-y-2 flex-1">
             <button onclick="showPage('dashboard')" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
                 <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
