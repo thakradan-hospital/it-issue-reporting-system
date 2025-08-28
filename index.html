@@ -521,20 +521,20 @@
             </div>
         </div>
         <!-- Sidebar Overlay Mobile -->
-<div id="mobileSidebar" class="fixed inset-0 bg-black/50 z-40 hidden md:hidden">
-    <div class="relative w-64 h-full sidebar-gradient p-5 flex flex-col">
-        
-        <!-- ปุ่มปิด (X) -->
-<button id="closeSidebarBtn"
-    class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center 
-           rounded-full bg-white/10 text-white shadow-md
-           hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500
-           hover:shadow-lg hover:shadow-purple-500/30
-           transition-all duration-300">
-    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+<div id="mobileSidebar" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden md:hidden">
+  <div class="relative w-72 h-full sidebar-gradient p-5 flex flex-col shadow-2xl transform -translate-x-full transition-transform duration-300">
+
+    <!-- ปุ่มปิด (X) -->
+    <button id="closeSidebarBtn"
+      class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center 
+             rounded-full bg-white/10 text-white shadow-md
+             hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500
+             hover:shadow-lg hover:shadow-purple-500/30
+             transition-all duration-300">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-    </svg>
-</button>
+      </svg>
+    </button>
 
         <div class="flex items-center mb-8 mt-8"> <!-- mt-8 กันไม่ให้ X ทับโลโก้ -->
             <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 neon-glow">
