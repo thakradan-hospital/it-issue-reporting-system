@@ -272,7 +272,7 @@
         @keyframes slideIn {
             from { opacity: 0; transform: translateX(-30px); }
             to { opacity: 1; transform: translateX(0); }
-        }
+        } 
     </style>
 </head>
 <body class="animated-gradient min-h-screen text-white overflow-hidden">
@@ -894,51 +894,41 @@
 
                         <form id="problemForm" class="relative z-10 space-y-4 sm:space-y-6">
                             <!-- Personal Information Section -->
-                            <div class="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/10">
-                                <div class="flex items-center mb-4 sm:mb-6">
-                                    <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg sm:rounded-xl flex items-center justify-center mr-3 sm:mr-4">
-                                        <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
-                                        </svg>
-                                    </div>
-                                    <div>
-                                        <h3 class="text-base sm:text-lg font-bold text-white">ข้อมูลผู้แจ้ง</h3>
-                                        <p class="text-xs sm:text-sm text-gray-400">กรอกชื่อและนามสกุล</p>
-                                    </div>
-                                </div>
-                                
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                                    <div class="space-y-2">
-                                        <label class="block text-sm sm:text-base font-semibold text-gray-300 flex items-center">
-                                            <span class="text-red-400 mr-1">*</span>
-                                            ชื่อ
-                                        </label>
-                                        <div class="relative">
-                                            <input type="text" id="firstName" class="input-field w-full px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl focus:outline-none text-white placeholder-gray-400 text-sm sm:text-base transition-all duration-300" placeholder="กรอกชื่อ" required>
-                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                                <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="space-y-2">
-                                        <label class="block text-sm sm:text-base font-semibold text-gray-300 flex items-center">
-                                            <span class="text-red-400 mr-1">*</span>
-                                            นามสกุล
-                                        </label>
-                                        <div class="relative">
-                                            <input type="text" id="lastName" class="input-field w-full px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl focus:outline-none text-white placeholder-gray-400 text-sm sm:text-base transition-all duration-300" placeholder="กรอกนามสกุล" required>
-                                            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
-                                                <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
-                                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
+<div class="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/10">
+    <div class="flex items-center mb-4 sm:mb-6">
+        <div class="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-lg sm:rounded-xl flex items-center justify-center mr-3 sm:mr-4">
+            <svg class="w-4 h-4 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 
+                0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+            </svg>
+        </div>
+        <div>
+            <h3 class="text-base sm:text-lg font-bold text-white">ข้อมูลผู้แจ้ง</h3>
+            <p class="text-xs sm:text-sm text-gray-400">กรอกชื่อ นามสกุล</p>
+        </div>
+    </div>
+    
+    <div class="space-y-2">
+        <label class="block text-sm sm:text-base font-semibold text-gray-300 flex items-center">
+            <span class="text-red-400 mr-1">*</span>
+            ชื่อ นามสกุล
+        </label>
+        <div class="relative">
+            <input type="text" id="fullName" 
+                   class="input-field w-full px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl 
+                          focus:outline-none text-white placeholder-gray-400 text-sm sm:text-base transition-all duration-300" 
+                   placeholder="กรอกชื่อและนามสกุล" required>
+            <div class="absolute inset-y-0 right-0 flex items-center pr-3">
+                <svg class="w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 
+                    10 10 10 10-4.48 10-10S17.52 2 12 
+                    2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 
+                    8l-9 9z"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+</div>
                             <!-- Department Section -->
                             <div class="bg-white/5 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-white/10">
                                 <div class="flex items-center mb-4 sm:mb-6">
@@ -959,7 +949,7 @@
                                         หน่วยงาน
                                     </label>
                                     <div class="relative">
-                                        <select id="department" class="input-field w-full px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl focus:outline-none text-white text-sm sm:text-base appearance-none cursor-pointer transition-all duration-300" required>
+                                        <select id="department" class="input-field w-full px-4 py-3 sm:py-4 rounded-lg sm:rounded-xl focus:outline-none text-white text-sm sm:text-base appearance-none cursor-pointer" required>
                                             <option value="">เลือกหน่วยงาน</option>
                                             <option value="ไอที">ไอที</option>
                                             <option value="บริหารทั่วไป">บริหารทั่วไป</option>
@@ -1472,10 +1462,8 @@
             
             <form id="editForm" class="space-y-6">
                 <input type="hidden" id="editIssueId">
-                <input type="hidden" id="editFirstName">
-                <input type="hidden" id="editLastName">
+                <input type="hidden" id="editFullName">   <!-- 👈 ใช้ตัวนี้แทน -->
                 <input type="hidden" id="editDepartment">
-
                 
                 <div class="space-y-2">
                     <label class="block text-sm font-semibold text-gray-300">สถานะการดำเนินการ</label>
@@ -1712,41 +1700,27 @@ function detectSLA(problemDetail) {
 
 
         // Initialize application
-        document.addEventListener('DOMContentLoaded', async function() {
-            initSupabase();
-            
-            // Test connection and load data
-            const isConnected = await testSupabaseConnection();
-            if (isConnected) {
-                await loadDataFromSupabase();
-            } else {
-                loadSampleData();
-            }
-            
-            // Login form handler
-            document.getElementById('loginForm').addEventListener('submit', handleLogin);
-            
-            // Problem form handler
-            document.getElementById('problemForm').addEventListener('submit', handleProblemSubmit);
-            
-            // Edit form handler
-            document.getElementById('editForm').addEventListener('submit', handleEditSubmit);
+document.addEventListener('DOMContentLoaded', async function() {
+    initSupabase();
+    
+    // Test connection and load data
+    const isConnected = await testSupabaseConnection();
+    if (isConnected) {
+        await loadDataFromSupabase();
+    } else {
+        loadSampleData();
+    }
+    
+    // Login form handler
+    document.getElementById('loginForm').addEventListener('submit', handleLogin);
+    
+    // Problem form handler → ใช้แค่ตัวนี้พอ
+    document.getElementById('problemForm').addEventListener('submit', handleProblemSubmit);
 
-            document.getElementById('problemForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+    // Edit form handler
+    document.getElementById('editForm').addEventListener('submit', handleEditSubmit);
+});
 
-                const firstName = document.getElementById('firstName').value;
-                const lastName = document.getElementById('lastName').value;
-                const department = document.getElementById('department').value;
-                const problemType = document.getElementById('problemType').value;
-                const problemDetail = document.getElementById('problemDetail').value;
-
-    await sendLineNotify(message);
-
-        });
-
-            
-        });
 
         // Load data from Supabase
         async function loadDataFromSupabase() {
@@ -1840,58 +1814,81 @@ function detectSLA(problemDetail) {
         }
 
         // Handle problem submission
-        async function handleProblemSubmit(e) {
-            e.preventDefault();
-            
-            try {
-                const formData = {
-                    first_name: document.getElementById('firstName').value,
-                    last_name: document.getElementById('lastName').value,
-                    department: document.getElementById('department').value,
-                    problem_type: document.getElementById('problemType').value,
-                    problem_detail: document.getElementById('problemDetail').value,
-                    status: 'รอดำเนินการ',
-                    reporter: currentUser.username
-                };
-                
-                // Try to save to Supabase first
-                const { data, error } = await supabase
-                    .from('it_issues')
-                    .insert([formData])
-                    .select();
-                
-                if (error) {
-                    console.error('Supabase error:', error);
-                    // Fallback to local storage
-                    const newIssue = {
-                        id: Date.now(),
-                        ...formData,
-                        created_at: new Date().toISOString()
-                    };
-                    issues.unshift(newIssue); // Add to beginning of array
-                    localStorage.setItem('itIssues', JSON.stringify(issues));
-                } else {
-                    console.log('✅ Issue saved to Supabase:', data);
-                    // Add to local issues array at the beginning
-                    issues.unshift(data[0]);
-                }
-                
-                // Reset form
-                document.getElementById('problemForm').reset();
-                
-                // Refresh dashboard if it's currently visible
-                if (!document.getElementById('dashboardPage').classList.contains('hidden')) {
-                    loadDashboard();
-                }
-                
-                // Show success popup
-                showPopup('success', 'ส่งรายงานสำเร็จ', 'ปัญหาได้รับการบันทึกเรียบร้อยแล้ว');
-                
-            } catch (error) {
-                console.error('Error submitting problem:', error);
-                showPopup('error', 'เกิดข้อผิดพลาด', 'ไม่สามารถส่งรายงานได้ กรุณาตรวจสอบข้อมูลและลองใหม่อีกครั้ง');
-            }
+async function handleProblemSubmit(e) {
+    e.preventDefault();
+    
+    try {
+        // ดึงค่าจาก input fullName
+        const fullName = document.getElementById('fullName').value.trim();
+        
+        // แยกชื่อ-นามสกุล
+        let firstName = "";
+        let lastName = "";
+        if (fullName.includes(" ")) {
+            const parts = fullName.split(" ");
+            firstName = parts[0];                  // คำแรก = ชื่อ
+            lastName = parts.slice(1).join(" ");   // ที่เหลือ = นามสกุล
+        } else {
+            firstName = fullName; // ถ้ามีแค่คำเดียว
+            lastName = "";
         }
+
+        const formData = {
+            first_name: firstName,
+            last_name: lastName,
+            department: document.getElementById('department').value,
+            problem_type: document.getElementById('problemType').value,
+            problem_detail: document.getElementById('problemDetail').value,
+            status: 'รอดำเนินการ',
+            reporter: currentUser.username
+        };
+        
+        // Try to save to Supabase first
+        const { data, error } = await supabase
+            .from('it_issues')
+            .insert([formData])
+            .select();
+        
+        if (error) {
+            console.error('Supabase error:', error);
+            // Fallback to local storage
+            const newIssue = {
+                id: Date.now(),
+                ...formData,
+                created_at: new Date().toISOString()
+            };
+            issues.unshift(newIssue); 
+            localStorage.setItem('itIssues', JSON.stringify(issues));
+
+            // 👉 ส่ง LINE แจ้งเตือนแม้ fallback
+            sendLineNotify(newIssue);
+
+        } else {
+            console.log('✅ Issue saved to Supabase:', data);
+            issues.unshift(data[0]);
+
+            // 👉 ส่ง LINE แจ้งเตือนเมื่อบันทึกลง Supabase สำเร็จ
+            sendLineNotify(data[0]);
+        }
+        
+        // Reset form
+        document.getElementById('problemForm').reset();
+        
+        // Refresh dashboard if it's currently visible
+        if (!document.getElementById('dashboardPage').classList.contains('hidden')) {
+            loadDashboard();
+        }
+        
+        // Show success popup
+        showPopup('success', 'ส่งรายงานสำเร็จ', 'ปัญหาได้รับการบันทึกเรียบร้อยแล้ว');
+        
+    } catch (error) {
+        console.error('Error submitting problem:', error);
+        showPopup('error', 'เกิดข้อผิดพลาด', 'ไม่สามารถส่งรายงานได้ กรุณาตรวจสอบข้อมูลและลองใหม่อีกครั้ง');
+    }
+}
+
+
 
         // Load dashboard
         async function loadDashboard() {
@@ -2748,20 +2745,20 @@ function detectSLA(problemDetail) {
         }
 
         // Open edit modal
-        function openEditModal(issueId) {
-            const issue = issues.find(i => i.id === issueId);
-            if (!issue) return;
-            
-            document.getElementById('editIssueId').value = issueId;
-            document.getElementById('editStatus').value = issue.status;
-            document.getElementById('editAssignee').value = issue.assignee || '';
-            
-            document.getElementById('editFirstName').value = issue.first_name;
-            document.getElementById('editLastName').value = issue.last_name;
-            document.getElementById('editDepartment').value = issue.department;
-            
-            document.getElementById('editModal').classList.remove('hidden');
-        }
+function openEditModal(issueId) {
+    const issue = issues.find(i => i.id === issueId);
+    if (!issue) return;
+
+    document.getElementById('editIssueId').value = issueId;
+    document.getElementById('editStatus').value = issue.status;
+    document.getElementById('editAssignee').value = issue.assignee || '';
+
+    // ✅ รวมชื่อ-นามสกุล
+    document.getElementById('editFullName').value = `${issue.first_name} ${issue.last_name}`;
+    document.getElementById('editDepartment').value = issue.department;
+
+    document.getElementById('editModal').classList.remove('hidden');
+}
 
         // Close edit modal
         function closeEditModal() {
@@ -3100,33 +3097,41 @@ function getCurrentDateTime() {
 document.getElementById('problemForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
+    const fullName = document.getElementById('fullName').value.trim();
+    let firstName = "";
+    let lastName = "";
+    if (fullName.includes(" ")) {
+        const parts = fullName.split(" ");
+        firstName = parts[0];
+        lastName = parts.slice(1).join(" ");
+    } else {
+        firstName = fullName;
+        lastName = "";
+    }
 
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
     const department = document.getElementById('department').value;
     const problemType = document.getElementById('problemType').value;
     const problemDetail = document.getElementById('problemDetail').value;
-
     const dateTime = getCurrentDateTime();
 
     // ✅ ดึงปัญหาล่าสุดจาก Supabase
-const { data, error } = await supabase
-  .from("it_issues")                  // 👈 เปลี่ยนชื่อตารางให้ตรงกับของคุณ
-  .select("id")
-  .order("created_at", { ascending: false })
-  .limit(1);
+    const { data, error } = await supabase
+      .from("it_issues")
+      .select("id")
+      .order("created_at", { ascending: false })
+      .limit(1);
 
-if (error) {
-  console.error("❌ Supabase Error:", error);
-}
+    if (error) {
+      console.error("❌ Supabase Error:", error);
+    }
 
-let issueId = "ไม่พบรหัส";
-if (data && data.length > 0) {
-  issueId = data[0].id;
-}
+    let issueId = "ไม่พบรหัส";
+    if (data && data.length > 0) {
+      issueId = data[0].id;
+    }
 
     const message = `📢 รายการแจ้งปัญหาใหม่วันนี้\n\n` +
-                    `📌 รหัสปัญหา : ${issueId}\n` +   // ✅ เพิ่มตรงนี้
+                    `📌 รหัสปัญหา : ${issueId}\n` +
                     `1) วันที่/เวลา : ${dateTime}\n` +
                     `2) ผู้แจ้ง : ${firstName} ${lastName}\n` +
                     `3) หน่วยงาน : ${department}\n` +
@@ -3135,24 +3140,35 @@ if (data && data.length > 0) {
                     `6) สถานะ : รอดำเนินการ `;
 
     await sendLineNotify(message);
-
 });
+
 
 // ✅ เพิ่มการแจ้ง LINE เมื่อแก้ไขสถานะ
 document.getElementById('editForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    const issueId = document.getElementById('editIssueId').value; // สมมติว่ามี hidden input เก็บ id
+    const issueId = document.getElementById('editIssueId').value; // hidden input เก็บ id
     const newStatus = document.getElementById('editStatus').value;
     const assignee = document.getElementById('editAssignee').value;
-    const firstName = document.getElementById('editFirstName').value;
-    const lastName = document.getElementById('editLastName').value;
+    const fullName = document.getElementById('editFullName').value.trim(); // 👈 เปลี่ยนเป็น fullName
     const department = document.getElementById('editDepartment').value;
+
+    // ✅ แยกชื่อ-นามสกุล (เหมือนตอน submit ฟอร์ม)
+    let firstName = "";
+    let lastName = "";
+    if (fullName.includes(" ")) {
+        const parts = fullName.split(" ");
+        firstName = parts[0];
+        lastName = parts.slice(1).join(" ");
+    } else {
+        firstName = fullName;
+        lastName = "";
+    }
 
     const dateTime = getCurrentDateTime();
 
     const message = `🔔 อัปเดตสถานะปัญหา\n\n` +
-                    `📌 รหัสปัญหา : ${issueId}\n` +   // ✅ เพิ่มตรงนี้
+                    `📌 รหัสปัญหา : ${issueId}\n` +
                     `1) วันที่/เวลา : ${dateTime}\n` +
                     `2) ผู้แจ้ง : ${firstName} ${lastName}\n` +
                     `3) หน่วยงาน : ${department}\n` +
@@ -3163,6 +3179,7 @@ document.getElementById('editForm').addEventListener('submit', async function(e)
 
     closeEditModal();
 });
+
 
 function parseThaiDate(dateStr) {
   // รับ "27/8/2568" หรือ "27/08/2568"
