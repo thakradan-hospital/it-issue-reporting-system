@@ -442,10 +442,18 @@
     <!-- Main Application -->
     <div id="mainApp" class="hidden flex h-screen relative z-10">
         <!-- Sidebar Toggle for Mobile -->
-    <button id="menuToggle" class="md:hidden fixed top-4 left-4 z-50 bg-blue-600 p-2 rounded-lg">
-  <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
-    <path d="M3 6h18M3 12h18M3 18h18"/>
-  </svg>
+<button id="menuToggle"
+  class="md:hidden fixed top-4 left-4 z-50 p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 
+         shadow-lg shadow-blue-500/30 hover:shadow-purple-500/40
+         hover:scale-110 active:scale-95 
+         transition-all duration-300 ease-in-out group">
+
+  <!-- เส้น Hamburger -->
+  <div class="space-y-1.5">
+    <span class="block w-6 h-0.5 bg-white rounded group-hover:w-7 transition-all duration-300"></span>
+    <span class="block w-6 h-0.5 bg-white rounded group-hover:w-7 transition-all duration-300"></span>
+    <span class="block w-6 h-0.5 bg-white rounded group-hover:w-7 transition-all duration-300"></span>
+  </div>
 </button>
         <!-- Sidebar Desktop -->
         <div class="w-64 hidden md:flex sidebar-gradient border-r border-white/10 p-5 flex-col">
