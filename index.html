@@ -1700,7 +1700,7 @@ function detectSLA(problemDetail) {
 
     // สถานะอื่น ๆ (เช่น กำลังดำเนินการ)
     return {
-        status: remainingMinutes >= 0 ? 'ยังไม่เกินเวลา' : 'เกินเวลา',
+        status: remainingMinutes >= 0 ? 'กำลังนับเวลา' : 'เกินเวลา',
         isOverdue: remainingMinutes < 0,
         remainingMinutes,
         completedInTime: null
