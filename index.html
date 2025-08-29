@@ -421,9 +421,9 @@
                         <svg class="w-3 h-3 text-green-400" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                         </svg>
-                        <span>ระบบปลอดภัย SSL</span>
+                        <span>IT Helpdesk</span>
                         <div class="w-0.5 h-0.5 bg-gray-400 rounded-full"></div>
-                        <span>เข้าถึงได้ 24/7</span>
+                        <span>ติดต่อเบอร์ภายใน 222</span>
                     </div>
                     
                     <!-- Version Info -->
@@ -441,21 +441,29 @@
 
     <!-- Main Application -->
     <div id="mainApp" class="hidden flex h-screen relative z-10">
-        <!-- Sidebar Toggle for Mobile -->
-<button id="menuToggle"
-  class="md:hidden fixed top-4 left-4 z-50 p-3 rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 
-         shadow-lg shadow-blue-500/30 hover:shadow-purple-500/40
-         hover:scale-110 active:scale-95 
-         transition-all duration-300 ease-in-out group">
+        <!-- Topbar (Mobile Only) -->
+<div id="mobileTopbar" class="md:hidden fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-cyan-500/20 shadow-lg px-4 py-3 flex justify-between items-center">
+    
+    <!-- ปุ่มเมนู -->
+    <button id="menuToggle"
+      class="p-2 rounded-xl bg-gradient-to-r from-blue-500 to-purple-600 
+             shadow-md hover:scale-110 active:scale-95 transition-all duration-300">
+      <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
 
-  <!-- Icon เมนู -->
-  <svg class="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-300"
-       fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
-  </svg>
-</button>
+    <!-- ปุ่มออกจากระบบ -->
+    <button onclick="logout()" 
+        class="flex items-center space-x-2 px-3 py-2 rounded-xl bg-gradient-to-r from-red-500 to-pink-600 text-white shadow-md hover:scale-105 transition-all duration-300">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+        </svg>
+        <span class="text-sm font-semibold">ออกจากระบบ</span>
+    </button>
+</div>
         <!-- Sidebar Desktop -->
-        <div class="w-64 hidden md:flex sidebar-gradient border-r border-white/10 p-5 flex-col">
+        <div class="w-64 hidden md:flex sidebar-gradient border-r border-white/10 p-5 flex-col mt-14">
             <div class="flex items-center mb-8">
                 <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 neon-glow">
                     <svg class="w-5 h-5" fill="white" viewBox="0 0 24 24">
@@ -467,7 +475,6 @@
                     <p class="text-xs text-gray-400">ระบบแจ้งปัญหาด้านเทคโนโลยีสารสนเทศ</p>
                 </div>
             </div>
-            
             <nav class="space-y-2 flex-1">
                 <button onclick="showPage('dashboard')" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
                     <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
@@ -528,22 +535,21 @@
             </div>
         </div>
         <!-- Sidebar Overlay Mobile -->
-<div id="mobileSidebar" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden md:hidden">
-  <div id="mobileSidebarContent"
-       class="relative w-72 h-full sidebar-gradient p-5 flex flex-col shadow-2xl 
-              transform -translate-x-full transition-transform duration-300">
+    <div id="mobileSidebar" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden md:hidden">
+        <div id="mobileSidebarContent"
+            class="relative w-72 h-full sidebar-gradient p-5 flex flex-col shadow-2xl 
+                    transform -translate-x-full transition-transform duration-300">
 
     <!-- ปุ่มปิด (X) -->
     <button id="closeSidebarBtn"
-      class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center 
-             rounded-full bg-white/10 text-white shadow-md
-             hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500
-             hover:shadow-lg hover:shadow-purple-500/30
-             transition-all duration-300">
-      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
-      </svg>
-    </button>
+    class="absolute top-4 right-4 w-9 h-9 flex items-center justify-center 
+           rounded-full bg-white/10 text-white shadow-md
+           hover:bg-gradient-to-r hover:from-blue-500 hover:to-purple-500
+           hover:shadow-lg hover:shadow-purple-500/30 transition-all duration-300">
+    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+    </svg>
+  </button>
 
         <div class="flex items-center mb-8 mt-8"> <!-- mt-8 กันไม่ให้ X ทับโลโก้ -->
             <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 neon-glow">
@@ -1702,12 +1708,6 @@ function detectSLA(problemDetail) {
 }
 
 
-
-
-
-
-
-
         // Initialize application
 document.addEventListener('DOMContentLoaded', async function() {
     initSupabase();
@@ -1784,19 +1784,25 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         // Show main application
-        function showMainApp() {
-            document.getElementById('loginPage').classList.add('hidden');
-            document.getElementById('mainApp').classList.remove('hidden');
-            
-            // Show/hide admin menus
-            if (currentUser.isAdmin) {
-                document.getElementById('manageBtn').classList.remove('hidden');
-                document.getElementById('reportsBtn').classList.remove('hidden');
-            }
-            
-            // Load dashboard
-            showPage('dashboard');
-        }
+function showMainApp() {
+    document.getElementById('loginPage').classList.add('hidden');
+    document.getElementById('mainApp').classList.remove('hidden');
+    
+    // Show/hide admin menus
+    if (currentUser.isAdmin) {
+        // Desktop
+        document.getElementById('manageBtn').classList.remove('hidden');
+        document.getElementById('reportsBtn').classList.remove('hidden');
+
+        // Mobile
+        document.querySelector('#mobileSidebar #manageBtn').classList.remove('hidden');
+        document.querySelector('#mobileSidebar #reportsBtn').classList.remove('hidden');
+    }
+
+    // Load dashboard
+    showPage('dashboard');
+}
+
 
         // Show page
         function showPage(page) {
@@ -1851,34 +1857,6 @@ async function handleProblemSubmit(e) {
             status: 'รอดำเนินการ',
             reporter: currentUser.username
         };
-        
-        // Try to save to Supabase first
-        const { data, error } = await supabase
-            .from('it_issues')
-            .insert([formData])
-            .select();
-        
-        if (error) {
-            console.error('Supabase error:', error);
-            // Fallback to local storage
-            const newIssue = {
-                id: Date.now(),
-                ...formData,
-                created_at: new Date().toISOString()
-            };
-            issues.unshift(newIssue); 
-            localStorage.setItem('itIssues', JSON.stringify(issues));
-
-            // 👉 ส่ง LINE แจ้งเตือนแม้ fallback
-            sendLineNotify(newIssue);
-
-        } else {
-            console.log('✅ Issue saved to Supabase:', data);
-            issues.unshift(data[0]);
-
-            // 👉 ส่ง LINE แจ้งเตือนเมื่อบันทึกลง Supabase สำเร็จ
-            sendLineNotify(data[0]);
-        }
         
         // Reset form
         document.getElementById('problemForm').reset();
@@ -1946,8 +1924,6 @@ async function handleProblemSubmit(e) {
     loadCharts(issues);
     loadRecentIssues(issues);
 }
-
-
 
         // Animate counter
         function animateCounter(elementId, targetValue) {
@@ -2168,8 +2144,8 @@ async function handleProblemSubmit(e) {
             }
         }
 
-        // Load recent issues
-        function loadRecentIssues() {
+    // Load recent issues
+    function loadRecentIssues() {
     const tbody = document.getElementById('recentIssuesTable');
     const cardsContainer = document.getElementById('recentIssuesCards');
 
@@ -3008,7 +2984,7 @@ function openEditModal(issueId) {
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, 'รายงานปัญหา IT');
             
-            const fileName = `รายงานปัญหา_IT_${new Date().toLocaleDateString('th-TH')}.xlsx`;
+            const fileName = `IT Issue Reporting-ฉบับเต็ม_${new Date().toLocaleDateString('th-TH')}.xlsx`;
             XLSX.writeFile(wb, fileName);
             
             showPopup('success', 'ส่งออกสำเร็จ', 'ไฟล์ Excel ได้รับการดาวน์โหลดเรียบร้อยแล้ว');
@@ -3103,53 +3079,87 @@ function getCurrentDateTime() {
 }
 
 // ✅ เพิ่มการแจ้ง LINE เมื่อส่งฟอร์มแจ้งปัญหา
+// ✅ ป้องกัน submit ซ้ำ
+let isSubmitting = false;
+
 document.getElementById('problemForm').addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    const fullName = document.getElementById('fullName').value.trim();
-    let firstName = "";
-    let lastName = "";
-    if (fullName.includes(" ")) {
-        const parts = fullName.split(" ");
-        firstName = parts[0];
-        lastName = parts.slice(1).join(" ");
-    } else {
-        firstName = fullName;
-        lastName = "";
+    if (isSubmitting) return; // ถ้า submit กำลังทำงานอยู่ ให้ return เลย
+    isSubmitting = true;
+
+    try {
+        const fullName = document.getElementById('fullName').value.trim();
+        let firstName = "";
+        let lastName = "";
+        if (fullName.includes(" ")) {
+            const parts = fullName.split(" ");
+            firstName = parts[0];
+            lastName = parts.slice(1).join(" ");
+        } else {
+            firstName = fullName;
+            lastName = "";
+        }
+
+        const department = document.getElementById('department').value;
+        const problemType = document.getElementById('problemType').value;
+        const problemDetail = document.getElementById('problemDetail').value;
+        const dateTime = getCurrentDateTime();
+
+        const formData = {
+            first_name: firstName,
+            last_name: lastName,
+            department,
+            problem_type: problemType,
+            problem_detail: problemDetail,
+            status: 'รอดำเนินการ',
+            created_at: new Date().toISOString()
+        };
+
+        // ✅ Insert ข้อมูลลง Supabase
+        const { data, error } = await supabase
+            .from('it_issues')
+            .insert([formData])
+            .select();
+
+        if (error) {
+            console.error("Supabase insert error:", error);
+            isSubmitting = false;
+            return;
+        }
+
+        if (!data || data.length === 0) {
+            console.error("ไม่พบข้อมูลที่เพิ่ง insert");
+            isSubmitting = false;
+            return;
+        }
+
+        const issueId = data[0].id; // id ของปัญหาใหม่
+
+        const message = `📢 รายการแจ้งปัญหาใหม่วันนี้\n\n` +
+                        `📌 รหัสปัญหา : ${issueId}\n` +
+                        `1) วันที่/เวลา : ${dateTime}\n` +
+                        `2) ผู้แจ้ง : ${firstName} ${lastName}\n` +
+                        `3) หน่วยงาน : ${department}\n` +
+                        `4) ประเภท : ${problemType}\n` +
+                        `5) รายละเอียด : ${problemDetail}\n` +
+                        `6) สถานะ : รอดำเนินการ`;
+
+        // ✅ ส่ง LINE Notify
+        await sendLineNotify(message);
+
+        // Reset form
+        document.getElementById('problemForm').reset();
+        console.log("ส่งข้อมูลและแจ้งเตือนเรียบร้อยแล้ว");
+
+    } catch (err) {
+        console.error("เกิดข้อผิดพลาดในการส่งฟอร์ม:", err);
+    } finally {
+        isSubmitting = false; // ปลดล็อก
     }
-
-    const department = document.getElementById('department').value;
-    const problemType = document.getElementById('problemType').value;
-    const problemDetail = document.getElementById('problemDetail').value;
-    const dateTime = getCurrentDateTime();
-
-    // ✅ ดึงปัญหาล่าสุดจาก Supabase
-    const { data, error } = await supabase
-      .from("it_issues")
-      .select("id")
-      .order("created_at", { ascending: false })
-      .limit(1);
-
-    if (error) {
-      console.error("❌ Supabase Error:", error);
-    }
-
-    let issueId = "ไม่พบรหัส";
-    if (data && data.length > 0) {
-      issueId = data[0].id;
-    }
-
-    const message = `📢 รายการแจ้งปัญหาใหม่วันนี้\n\n` +
-                    `📌 รหัสปัญหา : ${issueId}\n` +
-                    `1) วันที่/เวลา : ${dateTime}\n` +
-                    `2) ผู้แจ้ง : ${firstName} ${lastName}\n` +
-                    `3) หน่วยงาน : ${department}\n` +
-                    `4) ประเภท : ${problemType}\n` +
-                    `5) รายละเอียด : ${problemDetail}\n` +
-                    `6) สถานะ : รอดำเนินการ `;
-
-    await sendLineNotify(message);
 });
+
+
 
 
 // ✅ เพิ่มการแจ้ง LINE เมื่อแก้ไขสถานะ
@@ -3293,10 +3303,11 @@ function exportFilteredToExcel() {
 
   const ws = XLSX.utils.aoa_to_sheet(exportData);
   XLSX.utils.book_append_sheet(wb, ws, "Filtered Reports");
-  XLSX.writeFile(wb, "NotifyReports.xlsx");
+  XLSX.writeFile(wb, "IT Issue Reporting-ฉบับกรองรายงาน.xlsx");
 }
 
 const menuToggle = document.getElementById('menuToggle');
+const mobileTopbar = document.getElementById('mobileTopbar'); // 👈 เพิ่ม
 const mobileSidebar = document.getElementById('mobileSidebar');
 const mobileSidebarContent = document.querySelector('#mobileSidebar > div');
 const closeSidebarBtn = document.getElementById('closeSidebarBtn');
@@ -3307,16 +3318,16 @@ function openSidebar() {
     mobileSidebarContent.classList.remove('-translate-x-full');
   }, 10);
 
-  // 🔥 ซ่อนปุ่ม hamburger
-  menuToggle.classList.add('hidden');
+  // 🔥 ซ่อนทั้ง Topbar (ไม่ใช่แค่ hamburger)
+  mobileTopbar.classList.add('hidden');
 }
 
 function closeSidebar() {
   mobileSidebarContent.classList.add('-translate-x-full');
   setTimeout(() => {
     mobileSidebar.classList.add('hidden');
-    // 🔥 แสดงปุ่ม hamburger กลับมา
-    menuToggle.classList.remove('hidden');
+    // 🔥 แสดง Topbar กลับมา
+    mobileTopbar.classList.remove('hidden');
   }, 300); // ให้ตรงกับ duration-300 ของ transition
 }
 
@@ -3329,6 +3340,7 @@ mobileSidebar.addEventListener('click', (e) => {
     closeSidebar();
   }
 });
+
 
 
     </script>
