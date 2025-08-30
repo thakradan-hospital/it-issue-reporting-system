@@ -3,8 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="32x32" href="/tkd.png">
     <title>IT Issue Reporting System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -444,7 +442,7 @@
     <!-- Main Application -->
     <div id="mainApp" class="hidden flex h-screen relative z-10">
         <!-- Topbar (Mobile Only) -->
-<div id="mobileTopbar" class="md:hidden fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 border-b border-cyan-500/20 shadow-lg px-4 py-3 flex justify-between items-center">
+<div id="mobileTopbar" class="md:hidden fixed top-0 left-0 right-0 z-50 bg-gradient-to-br from-blue-500 to-purple-600 border-b border-white/10 shadow-lg px-4 py-3 flex justify-between items-center">
     
     <!-- ปุ่มเมนู -->
     <button id="menuToggle"
@@ -465,7 +463,7 @@
     </button>
 </div>
         <!-- Sidebar Desktop -->
-        <div class="w-64 hidden md:flex sidebar-gradient border-r border-white/10 p-5 flex-col mt-14">
+        <div class="w-64 hidden md:flex sidebar-gradient border-r border-white/10 p-5 flex-col mt-0">
             <div class="flex items-center mb-8">
                 <div class="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 neon-glow">
                     <svg class="w-5 h-5" fill="white" viewBox="0 0 24 24">
@@ -478,7 +476,7 @@
                 </div>
             </div>
             <nav class="space-y-2 flex-1">
-                <button onclick="showPage('dashboard')" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
+                <button onclick="showPage('dashboard', event)" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
                     <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
@@ -490,7 +488,7 @@
                     </div>
                 </button>
                 
-                <button onclick="showPage('report')" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
+                <button onclick="showPage('report', event)" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
                     <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
@@ -502,7 +500,7 @@
                     </div>
                 </button>
                 
-                <button onclick="showPage('manage')" id="manageBtn" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group hidden">
+                <button onclick="showPage('manage', event)" id="manageBtn" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group hidden">
                     <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
@@ -514,7 +512,7 @@
                     </div>
                 </button>
                 
-                <button onclick="showPage('reports')" id="reportsBtn" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group hidden">
+                <button onclick="showPage('reports', event)" id="reportsBtn" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group hidden">
                     <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
                         <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
@@ -566,7 +564,7 @@
         </div>
         
         <nav class="space-y-2 flex-1">
-            <button onclick="showPage('dashboard')" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
+            <button onclick="showPage('dashboard', event)" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
                 <div class="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z"/>
@@ -578,7 +576,7 @@
                 </div>
             </button>
             
-            <button onclick="showPage('report')" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
+            <button onclick="showPage('report', event)" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group">
                 <div class="w-8 h-8 bg-gradient-to-br from-green-500 to-green-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
@@ -590,7 +588,7 @@
                 </div>
             </button>
             
-            <button onclick="showPage('manage')" id="manageBtn" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group hidden">
+            <button onclick="showPage('manage', event)" id="manageBtn" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group hidden">
                 <div class="w-8 h-8 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
@@ -602,7 +600,7 @@
                 </div>
             </button>
             
-            <button onclick="showPage('reports')" id="reportsBtn" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group hidden">
+            <button onclick="showPage('reports', event)" id="reportsBtn" class="nav-item w-full text-left px-4 py-3 rounded-lg transition-all flex items-center group hidden">
                 <div class="w-8 h-8 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center mr-3 group-hover:scale-110 transition-transform">
                     <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
@@ -1756,36 +1754,54 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
 
-        // Handle login
-        async function handleLogin(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            
-            // Check credentials
-            if ((username === 'admin' && password === 'ittkd11281') || 
-                (username === 'tkd' && password === 'tkd')) {
-                
-                currentUser = {
-                    username: username,
-                    isAdmin: username === 'admin'
-                };
-                
-                // Show success popup
-                showPopup('success', 'เข้าสู่ระบบสำเร็จ', 'ยินดีต้อนรับเข้าสู่ระบบแจ้งปัญหาด้านเทคโนโลยีสารสนเทศ');
-                
-                setTimeout(() => {
-                    closePopup();
-                    showMainApp();
-                }, 2000);
-                
-            } else {
-                showPopup('error', 'เข้าสู่ระบบไม่สำเร็จ', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
-            }
+        // Handle login (Supabase)
+async function handleLogin(e) {
+    e.preventDefault();
+
+    const username = document.getElementById('username').value.trim();
+    const password = document.getElementById('password').value.trim();
+
+    try {
+        // ดึง user จาก Supabase
+        const { data: user, error } = await supabase
+            .from("users")
+            .select("*")
+            .eq("username", username)
+            .eq("password", password)
+            .single();
+
+        if (error || !user) {
+            showPopup('error', 'เข้าสู่ระบบไม่สำเร็จ', 'ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่อีกครั้ง');
+            return;
         }
 
-        // Show main application
+        // ✅ Login สำเร็จ
+        currentUser = {
+            username: user.username,
+            isAdmin: user.role === "admin"
+        };
+
+        showPopup('success', 'เข้าสู่ระบบสำเร็จ', 'ยินดีต้อนรับเข้าสู่ระบบแจ้งปัญหาด้านเทคโนโลยีสารสนเทศ');
+
+        setTimeout(() => {
+            closePopup();
+            showMainApp();
+
+            // ถ้าเป็น admin ให้แสดงเมนู
+            if (user.role === "admin") {
+                document.getElementById("manageBtn").classList.remove("hidden");
+                document.getElementById("reportsBtn").classList.remove("hidden");
+            }
+        }, 2000);
+
+    } catch (err) {
+        console.error("Login error:", err);
+        showPopup('error', 'เกิดข้อผิดพลาด', 'ไม่สามารถเข้าสู่ระบบได้');
+    }
+}
+
+
+// Show main application
 function showMainApp() {
     document.getElementById('loginPage').classList.add('hidden');
     document.getElementById('mainApp').classList.remove('hidden');
@@ -1806,29 +1822,31 @@ function showMainApp() {
 }
 
 
-        // Show page
-        function showPage(page) {
-            // Hide all pages
-            document.querySelectorAll('[id$="Page"]').forEach(p => p.classList.add('hidden'));
-            
-            // Show selected page
-            document.getElementById(page + 'Page').classList.remove('hidden');
-            
-            // Update navigation
-            document.querySelectorAll('.nav-item').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            event.target.closest('.nav-item').classList.add('active');
-            
-            // Load page data
-            if (page === 'dashboard') {
-                loadDashboard();
-            } else if (page === 'manage') {
-                loadManageIssues();
-            } else if (page === 'reports') {
-                loadReports();
-            }
-        }
+    // Show page
+function showPage(page, event) {
+    // Hide all pages
+    document.querySelectorAll('[id$="Page"]').forEach(p => p.classList.add('hidden'));
+    
+    // Show selected page
+    document.getElementById(page + 'Page').classList.remove('hidden');
+    
+    // Update navigation
+    document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    if (event) {
+        event.target.closest('.nav-item').classList.add('active');
+    }
+    
+    // Load page data
+    if (page === 'dashboard') {
+        loadDashboard();
+    } else if (page === 'manage') {
+        loadManageIssues();
+    } else if (page === 'reports') {
+        loadReports();
+    }
+}
 
         // Handle problem submission
 async function handleProblemSubmit(e) {
@@ -1949,202 +1967,186 @@ async function handleProblemSubmit(e) {
             requestAnimationFrame(updateCounter);
         }
 
-        // Draw center text for doughnut chart
         function drawCenterText(chart, totalCount) {
-            const ctx = chart.ctx;
-            const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
-            const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
-            
-            ctx.save();
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            
-            // Draw total number
-            ctx.fillStyle = '#ffffff';
-            ctx.font = `bold ${window.innerWidth < 768 ? '24px' : '32px'} 'Prompt', sans-serif`;
-            ctx.fillText(totalCount, centerX, centerY - (window.innerWidth < 768 ? 8 : 12));
-            
-            // Draw label
-            ctx.fillStyle = '#9ca3af';
-            ctx.font = `${window.innerWidth < 768 ? '12px' : '14px'} 'Prompt', sans-serif`;
-            ctx.fillText('ปัญหาทั้งหมด', centerX, centerY + (window.innerWidth < 768 ? 12 : 16));
-            
-            ctx.restore();
-        }
+    // ตรวจสอบ chart และ chartArea
+    if (!chart || !chart.chartArea) return;
 
-        // Load charts
-        function loadCharts() {
-            // Problem types chart
-            const problemTypes = {};
-            issues.forEach(issue => {
-                problemTypes[issue.problem_type] = (problemTypes[issue.problem_type] || 0) + 1;
-            });
-            
-            const problemChart = document.getElementById('problemChart');
-            if (problemChart) {
-                const totalProblems = Object.values(problemTypes).reduce((sum, count) => sum + count, 0);
-                
-                new Chart(problemChart, {
-                    type: 'doughnut',
-                    data: {
-                        labels: Object.keys(problemTypes),
-                        datasets: [{
-                            data: Object.values(problemTypes),
-                            backgroundColor: [
-                                'rgba(59, 130, 246, 0.8)',
-                                'rgba(34, 197, 94, 0.8)',
-                                'rgba(234, 179, 8, 0.8)',
-                                'rgba(239, 68, 68, 0.8)',
-                                'rgba(147, 51, 234, 0.8)',
-                                'rgba(6, 182, 212, 0.8)'
-                            ],
-                            borderWidth: 0,
-                            hoverOffset: window.innerWidth < 768 ? 5 : 10,
-                            cutout: window.innerWidth < 768 ? '50%' : '60%'
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                position: window.innerWidth < 768 ? 'bottom' : 'right',
-                                labels: {
-                                    color: 'white',
-                                    padding: window.innerWidth < 768 ? 10 : 15,
-                                    font: {
-                                        size: window.innerWidth < 768 ? 10 : 12
-                                    },
-                                    usePointStyle: true,
-                                    pointStyle: 'circle',
-                                    boxWidth: window.innerWidth < 768 ? 8 : 12
-                                }
-                            },
-                            tooltip: {
-                                backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                                titleColor: 'white',
-                                bodyColor: 'white',
-                                borderColor: 'rgba(255, 255, 255, 0.2)',
-                                borderWidth: 1,
-                                cornerRadius: 8,
-                                displayColors: true,
-                                titleFont: {
-                                    size: window.innerWidth < 768 ? 12 : 14
-                                },
-                                bodyFont: {
-                                    size: window.innerWidth < 768 ? 11 : 13
-                                }
-                            }
-                        },
-                        layout: {
-                            padding: {
-                                top: window.innerWidth < 768 ? 5 : 10,
-                                bottom: window.innerWidth < 768 ? 5 : 10,
-                                left: window.innerWidth < 768 ? 5 : 10,
-                                right: window.innerWidth < 768 ? 5 : 10
-                            }
-                        },
-                        onHover: (event, activeElements) => {
-                            // Keep center text visible during hover
-                        },
-                        animation: {
-                            onComplete: function() {
-                                drawCenterText(this, totalProblems);
-                            },
-                            onProgress: function() {
-                                drawCenterText(this, totalProblems);
-                            }
+    const ctx = chart.ctx;
+    if (!ctx) return;
+
+    const centerX = chart.chartArea.left + (chart.chartArea.right - chart.chartArea.left) / 2;
+    const centerY = chart.chartArea.top + (chart.chartArea.bottom - chart.chartArea.top) / 2;
+
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+
+    // วาด totalCount ถ้าไม่มีข้อมูล ใช้ 0 แทน
+    const displayCount = totalCount || 0;
+
+    ctx.fillStyle = '#ffffff';
+    ctx.font = `bold ${window.innerWidth < 768 ? '24px' : '32px'} 'Prompt', sans-serif`;
+    ctx.fillText(displayCount, centerX, centerY - (window.innerWidth < 768 ? 8 : 12));
+
+    // วาด label
+    ctx.fillStyle = '#9ca3af';
+    ctx.font = `${window.innerWidth < 768 ? '12px' : '14px'} 'Prompt', sans-serif`;
+    ctx.fillText('ปัญหาทั้งหมด', centerX, centerY + (window.innerWidth < 768 ? 12 : 16));
+
+    ctx.restore();
+}
+
+    function loadCharts() {
+    // ตรวจสอบ issues ก่อน
+    const safeIssues = (Array.isArray(issues) && issues.length > 0) ? issues : [];
+
+    // ------------------------
+    // Problem types chart
+    // ------------------------
+    const problemTypes = {};
+    safeIssues.forEach(issue => {
+        problemTypes[issue.problem_type] = (problemTypes[issue.problem_type] || 0) + 1;
+    });
+
+    const problemChart = document.getElementById('problemChart');
+    if (problemChart) {
+        const labels = Object.keys(problemTypes);
+        const data = Object.values(problemTypes);
+        const totalProblems = data.reduce((sum, count) => sum + count, 0);
+
+        new Chart(problemChart, {
+            type: 'doughnut',
+            data: {
+                labels: labels.length ? labels : ['ไม่มีข้อมูล'],
+                datasets: [{
+                    data: data.length ? data : [0],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.8)',
+                        'rgba(34, 197, 94, 0.8)',
+                        'rgba(234, 179, 8, 0.8)',
+                        'rgba(239, 68, 68, 0.8)',
+                        'rgba(147, 51, 234, 0.8)',
+                        'rgba(6, 182, 212, 0.8)'
+                    ],
+                    borderWidth: 0,
+                    hoverOffset: window.innerWidth < 768 ? 5 : 10,
+                    cutout: window.innerWidth < 768 ? '50%' : '60%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: window.innerWidth < 768 ? 'bottom' : 'right',
+                        labels: {
+                            color: 'white',
+                            padding: window.innerWidth < 768 ? 10 : 15,
+                            font: { size: window.innerWidth < 768 ? 10 : 12 },
+                            usePointStyle: true,
+                            pointStyle: 'circle',
+                            boxWidth: window.innerWidth < 768 ? 8 : 12
                         }
-                    }
-                });
-            }
-            
-            // Departments chart
-            const departments = {};
-            issues.forEach(issue => {
-                departments[issue.department] = (departments[issue.department] || 0) + 1;
-            });
-            
-            // Sort departments by count (descending - from high to low)
-            const sortedDepartments = Object.entries(departments)
-                .sort(([,a], [,b]) => b - a); // Sort by count descending
-            
-            const departmentChart = document.getElementById('departmentChart');
-            if (departmentChart) {
-                new Chart(departmentChart, {
-                    type: 'bar',
-                    data: {
-                        labels: sortedDepartments.map(([dept]) => dept),
-                        datasets: [{
-                            label: 'จำนวนปัญหา',
-                            data: sortedDepartments.map(([,count]) => count),
-                            backgroundColor: 'rgba(59, 130, 246, 0.8)',
-                            borderColor: 'rgba(59, 130, 246, 1)',
-                            borderWidth: 2,
-                            borderRadius: 8,
-                            borderSkipped: false
-                        }]
                     },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        },
-                        scales: {
-                            x: {
-                                ticks: {
-                                    color: 'white',
-                                    font: {
-                                        size: window.innerWidth < 768 ? 9 : 11
-                                    },
-                                    maxRotation: 45,
-                                    minRotation: 45,
-                                    callback: function(value, index, values) {
-                                        const label = this.getLabelForValue(value);
-                                        // Split long department names into multiple lines
-                                        if (label.length > 12) {
-                                            const words = label.split(' ');
-                                            if (words.length > 1) {
-                                                const mid = Math.ceil(words.length / 2);
-                                                return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
-                                            }
-                                        }
-                                        return label;
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: 'white',
+                        bodyColor: 'white',
+                        borderColor: 'rgba(255, 255, 255, 0.2)',
+                        borderWidth: 1,
+                        cornerRadius: 8,
+                        displayColors: true,
+                        titleFont: { size: window.innerWidth < 768 ? 12 : 14 },
+                        bodyFont: { size: window.innerWidth < 768 ? 11 : 13 }
+                    }
+                },
+                layout: {
+                    padding: {
+                        top: window.innerWidth < 768 ? 5 : 10,
+                        bottom: window.innerWidth < 768 ? 5 : 10,
+                        left: window.innerWidth < 768 ? 5 : 10,
+                        right: window.innerWidth < 768 ? 5 : 10
+                    }
+                },
+                animation: {
+                    onComplete: function() { drawCenterText(this, totalProblems); },
+                    onProgress: function() { drawCenterText(this, totalProblems); }
+                }
+            }
+        });
+    }
+
+    // ------------------------
+    // Departments chart
+    // ------------------------
+    const departments = {};
+    safeIssues.forEach(issue => {
+        departments[issue.department] = (departments[issue.department] || 0) + 1;
+    });
+
+    // Sort departments by count descending
+    const sortedDepartments = Object.entries(departments)
+        .sort(([,a], [,b]) => b - a);
+
+    const departmentChart = document.getElementById('departmentChart');
+    if (departmentChart) {
+        const deptLabels = sortedDepartments.map(([dept]) => dept);
+        const deptData = sortedDepartments.map(([,count]) => count);
+
+        new Chart(departmentChart, {
+            type: 'bar',
+            data: {
+                labels: deptLabels.length ? deptLabels : ['ไม่มีข้อมูล'],
+                datasets: [{
+                    label: 'จำนวนปัญหา',
+                    data: deptData.length ? deptData : [0],
+                    backgroundColor: 'rgba(59, 130, 246, 0.8)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 2,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: {
+                        ticks: {
+                            color: 'white',
+                            font: { size: window.innerWidth < 768 ? 9 : 11 },
+                            maxRotation: 45,
+                            minRotation: 45,
+                            callback: function(value, index, values) {
+                                const label = this.getLabelForValue(value);
+                                if (label.length > 12) {
+                                    const words = label.split(' ');
+                                    if (words.length > 1) {
+                                        const mid = Math.ceil(words.length / 2);
+                                        return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
                                     }
-                                },
-                                grid: {
-                                    color: 'rgba(255, 255, 255, 0.1)',
-                                    display: false
                                 }
-                            },
-                            y: {
-                                ticks: {
-                                    color: 'white',
-                                    font: {
-                                        size: window.innerWidth < 768 ? 9 : 11
-                                    },
-                                    stepSize: 1
-                                },
-                                grid: {
-                                    color: 'rgba(255, 255, 255, 0.1)'
-                                }
+                                return label;
                             }
                         },
-                        layout: {
-                            padding: {
-                                top: 15,
-                                bottom: 20,
-                                left: 15,
-                                right: 15
-                            }
-                        }
+                        grid: { color: 'rgba(255, 255, 255, 0.1)', display: false }
+                    },
+                    y: {
+                        ticks: {
+                            color: 'white',
+                            font: { size: window.innerWidth < 768 ? 9 : 11 },
+                            stepSize: 1
+                        },
+                        grid: { color: 'rgba(255, 255, 255, 0.1)' }
                     }
-                });
+                },
+                layout: { padding: { top: 15, bottom: 20, left: 15, right: 15 } }
             }
-        }
+        });
+    }
+}
+
 
     // Load recent issues
     function loadRecentIssues() {
@@ -3348,4 +3350,3 @@ mobileSidebar.addEventListener('click', (e) => {
     </script>
 <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'974809a997534f5d',t:'MTc1NjA5MjkwOS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
 </html>
-
