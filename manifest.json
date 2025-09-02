@@ -1,5 +1,5 @@
 {
-  "name": "IT Issue Reporting System",
+  "name": "ระบบแจ้งปัญหาด้านเทคโนโลยีสารสนเทศ",
   "short_name": "IT Helpdesk",
   "start_url": "./index.html",
   "display": "standalone",
@@ -7,14 +7,15 @@
   "theme_color": "#0ea5e9",
   "icons": [
     {
-      "src": "it1.png",
+      "src": "it2.png",
       "sizes": "180x180",
       "type": "image/png"
     },
     {
-      "src": "it1.png",
+      "src": "it3.png",
       "sizes": "512x512",
       "type": "image/png"
     }
   ]
 }
+
